@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import Section from './Section.astro';
+import FeatureCard from './FeatureCard.astro';
+
+const items = (await getCollection('features')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Section id="features" title="Five primitives for personal AI" kicker="What's inside">
+  <div class="grid">
+    {items.map((f) => <FeatureCard title={f.data.title} summary={f.data.summary} />)}
+  </div>
+</Section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+</style>
