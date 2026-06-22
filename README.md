@@ -14,7 +14,7 @@ npm test           # run vitest unit tests
 
 ## Editing content
 
-- **Structured copy** (primitives, showcase cards, how-it-works steps, research papers, community links): edit the Markdown/MDX files under `src/content/` — each collection has a schema defined in `src/content/config.ts`.
+- **Structured copy** (primitives, showcase cards, how-it-works steps, research papers, community links): edit the Markdown/MDX files under `src/content/` — each collection has a schema defined in `src/content.config.ts`.
 - **Site-wide metadata** (name, tagline, nav links, footer links, install one-liner, social URLs): edit `src/config/site.ts`.
 - **Component markup/styles**: components live in `src/components/`; pages in `src/pages/`.
 

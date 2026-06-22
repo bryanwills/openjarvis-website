@@ -8,7 +8,7 @@ const { title, summary } = Astro.props;
 ---
 
 <article class="feature-card">
-  <h3 set:html={title}></h3>
+  <h3>{title}</h3>
   <p>{summary}</p>
 </article>
 

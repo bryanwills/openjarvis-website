@@ -8,6 +8,7 @@ import { site } from '../config/site';
     <div class="code-pill-wrap">
       <code class="code-pill" id="install-cmd">{site.install}</code>
       <button
+        id="copy-install-btn-qs"
         class="btn btn-outline copy-btn"
         data-install={site.install}
         aria-label="Copy install command"
@@ -29,7 +30,7 @@ import { site } from '../config/site';
 <script>
   import { copyText } from '../lib/clipboard';
 
-  const btn = document.querySelector<HTMLButtonElement>('.copy-btn');
+  const btn = document.querySelector<HTMLButtonElement>('#copy-install-btn-qs');
   if (btn) {
     btn.addEventListener('click', async () => {
       const text = btn.dataset.install ?? '';
