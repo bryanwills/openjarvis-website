@@ -1,9 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Quickstart from '../components/Quickstart.astro';
+import Features from '../components/Features.astro';
+import ShowcaseGallery from '../components/ShowcaseGallery.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Research from '../components/Research.astro';
+import Community from '../components/Community.astro';
+import Footer from '../components/Footer.astro';
 ---
 <Base>
-  <main class="container" style="padding-top:4rem">
-    <h1>OpenJarvis</h1>
-    <p>Personal AI, On Personal Devices.</p>
+  <Nav />
+  <main>
+    <Hero />
+    <Quickstart />
+    <Features />
+    <ShowcaseGallery />
+    <HowItWorks />
+    <Research />
+    <Community />
   </main>
+  <Footer />
 </Base>

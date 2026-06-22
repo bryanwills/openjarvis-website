@@ -27,15 +27,13 @@ import { site } from '../config/site';
 </Section>
 
 <script>
+  import { copyText } from '../lib/clipboard';
+
   const btn = document.querySelector<HTMLButtonElement>('.copy-btn');
   if (btn) {
     btn.addEventListener('click', async () => {
       const text = btn.dataset.install ?? '';
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        /* clipboard unavailable */
-      }
+      await copyText(text);
       btn.textContent = 'Copied!';
       setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
     });

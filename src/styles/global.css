@@ -218,3 +218,70 @@ ol {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* ---------- Responsive: collapse grids to 1 column under 720px ---------- */
+@media (max-width: 720px) {
+  /* Any grid that uses auto-fill / auto-fit collapses to single column */
+  [class*="grid"],
+  .gallery,
+  .cta-grid,
+  .stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Container padding tightens on small screens */
+  .container {
+    padding: 0 16px;
+  }
+
+  /* Section vertical rhythm tightens */
+  .section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Hero adjustments */
+  .hero {
+    padding: 48px 0 40px;
+  }
+
+  /* Footer brand goes full width */
+  .footer-brand {
+    max-width: 100%;
+  }
+}
+
+/* ---------- Dark mode: ensure surfaces, cards, terminal, footer read correctly ---------- */
+@media (prefers-color-scheme: dark) {
+  /* Section alternating backgrounds */
+  .section:nth-child(even) {
+    background-color: var(--color-bg-alt);
+  }
+
+  /* Cards / surfaces pick up the dark surface token automatically via var(--color-surface),
+     but we reinforce border visibility */
+  .gallery-item,
+  .stat-card,
+  .cta-card,
+  .code-pill-wrap,
+  .arch-wrap,
+  pre {
+    border-color: var(--color-border);
+  }
+
+  /* Sticky nav: slightly more opaque on dark so content doesn't bleed through */
+  .site-header {
+    background-color: color-mix(in srgb, var(--color-bg) 90%, transparent);
+  }
+
+  /* Footer background reinforcement */
+  .site-footer {
+    background-color: var(--color-bg-alt);
+    border-top-color: var(--color-border);
+  }
+
+  /* Footer bottom bar */
+  .footer-bottom {
+    border-top-color: var(--color-border);
+  }
+}
