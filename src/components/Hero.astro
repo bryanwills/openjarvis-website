@@ -1,0 +1,82 @@
+---
+import { site } from '../config/site';
+import Terminal from './Terminal.astro';
+---
+
+<section class="hero">
+  <div class="hero-inner container">
+    <h1 class="hero-heading">
+      Personal AI,<br />On Personal Devices
+    </h1>
+
+    <p class="hero-subhead">{site.subhead}</p>
+
+    <div class="hero-ctas">
+      <a href="#quickstart" class="btn btn-primary">Get Started</a>
+      <a
+        href={site.links.github}
+        class="btn btn-outline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View on GitHub
+      </a>
+    </div>
+
+    <div class="hero-terminal">
+      <Terminal />
+    </div>
+
+    <p class="hero-footer-note">{site.footerNote}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: 72px 0 64px;
+    text-align: center;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .hero-heading {
+    font-size: clamp(2.4rem, 6vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0 0 0.6em;
+  }
+
+  .hero-subhead {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--color-text-secondary);
+    margin: 0 0 2rem;
+    max-width: 520px;
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-terminal {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1.75rem;
+  }
+
+  .hero-footer-note {
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
+    margin: 0;
+  }
+</style>
