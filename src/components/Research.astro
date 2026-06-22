@@ -1,0 +1,93 @@
+---
+import Section from './Section.astro';
+import { site } from '../config/site';
+---
+
+<Section id="research" title="Backed by research" kicker="Research">
+  <div class="research-body">
+    <p class="blurb">
+      OpenJarvis is developed as part of a Stanford research program on local-first personal AI.
+      Our published results show measurable efficiency gains across the 2023–2025 deployment cohort.
+    </p>
+
+    <div class="stats">
+      <div class="stat-card">
+        <span class="stat-number">88.7%</span>
+        <span class="stat-label">of single-turn queries handled locally — no cloud round-trip</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">5.3×</span>
+        <span class="stat-label">efficiency improvement from 2023 to 2025</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a
+        href={site.links.paper}
+        class="btn btn-primary"
+        target="_blank"
+        rel="noopener"
+      >
+        Read the paper
+      </a>
+      <a
+        href={site.links.ipw}
+        class="btn btn-outline"
+        target="_blank"
+        rel="noopener"
+      >
+        Intelligence-Per-Watt
+      </a>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .research-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .blurb {
+    max-width: 64ch;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.75rem;
+  }
+
+  .stat-number {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 800;
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import Section from './Section.astro';
+---
+
+<Section id="how" title="In the spirit of PyTorch" kicker="Architecture">
+  <div class="how-body">
+    <p class="intro">
+      OpenJarvis is built around composable primitives — engine, agents, tools, memory, skills,
+      recipes, and scheduler — that you assemble freely, the same way you compose layers in
+      PyTorch. Each primitive is a typed registry entry; swap, extend, or replace any piece
+      without touching the rest of the stack. Cloud APIs are optional: the same code runs
+      entirely on your hardware or routes selectively to the cloud.
+    </p>
+    <div class="arch-wrap">
+      <img
+        src="/architecture.png"
+        alt="OpenJarvis architecture diagram showing the composable primitives: engine, agents, tools, memory, skills, recipes, and scheduler"
+        loading="lazy"
+        class="arch-img"
+      />
+    </div>
+  </div>
+</Section>
+
+<style>
+  .how-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .intro {
+    max-width: 68ch;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .arch-wrap {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--color-surface);
+  }
+
+  .arch-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
