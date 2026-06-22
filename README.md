@@ -1,43 +1,29 @@
-# Astro Starter Kit: Minimal
+# OpenJarvis Website
 
-```sh
-npm create astro@latest -- --template minimal
+Marketing and documentation site for [OpenJarvis](https://github.com/open-jarvis/OpenJarvis) — a local-first personal-AI framework. Built with [Astro](https://astro.build) and deployed to GitHub Pages at `https://openjarvis.stanford.edu`.
+
+## Development
+
+```bash
+npm install        # install dependencies
+npm run dev        # start local dev server at localhost:4321
+npm run build      # production build → ./dist/
+npm run preview    # preview the production build locally
+npm test           # run vitest unit tests
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Editing content
 
-## 🚀 Project Structure
+- **Structured copy** (primitives, showcase cards, how-it-works steps, research papers, community links): edit the Markdown/MDX files under `src/content/` — each collection has a schema defined in `src/content/config.ts`.
+- **Site-wide metadata** (name, tagline, nav links, footer links, install one-liner, social URLs): edit `src/config/site.ts`.
+- **Component markup/styles**: components live in `src/components/`; pages in `src/pages/`.
 
-Inside of your Astro project, you'll see the following folders and files:
+## GitHub Pages setup (human / org-admin)
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+Once the `open-jarvis/website` repository exists and CI is green, complete these one-time steps in the GitHub repo settings:
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+1. **Enable Pages**: Settings → Pages → Source → select **GitHub Actions**.
+2. **Set custom domain**: in the "Custom domain" field enter `openjarvis.stanford.edu` and save. GitHub will commit a `CNAME` file — the repo already has `public/CNAME` pinning the domain, so this is a no-op for the file but triggers cert provisioning.
+3. **Enforce HTTPS**: once GitHub reports "DNS check successful" and the TLS certificate has provisioned (usually a few minutes), tick **Enforce HTTPS**.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+> **DNS note:** the Stanford DNS CNAME (`openjarvis.stanford.edu → open-jarvis.github.io`) is already configured. `public/CNAME` in this repo pins the domain so it survives every deploy.
