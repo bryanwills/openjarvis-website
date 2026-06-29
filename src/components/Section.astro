@@ -2,35 +2,31 @@
 interface Props {
   id: string;
   title: string;
-  kicker?: string;
+  link?: string;
+  linkText?: string;
+  external?: boolean;
 }
 
-const { id, title, kicker } = Astro.props;
+const { id, title, link, linkText, external } = Astro.props;
 ---
 
 <section id={id} class="section">
   <div class="container">
-    {kicker && <p class="kicker">{kicker}</p>}
-    <h2>{title}</h2>
+    <div class="section-header">
+      <h2 class="section-title">
+        <span class="section-chevron" aria-hidden="true">&#10217;</span>
+        {title}
+      </h2>
+      {link && (
+        <a
+          class="section-link"
+          href={link}
+          {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+        >
+          {linkText ?? 'View all'} <span aria-hidden="true">&rarr;</span>
+        </a>
+      )}
+    </div>
     <slot />
   </div>
 </section>
-
-<style>
-  .section {
-    padding: 80px 0;
-  }
-
-  .kicker {
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-    margin: 0 0 0.5rem;
-  }
-
-  h2 {
-    margin-bottom: 2.5rem;
-  }
-</style>

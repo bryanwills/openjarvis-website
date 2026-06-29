@@ -1,68 +1,80 @@
 /* ============================================================
-   OpenJarvis global theme — light/dark, typography, utilities
-   Palette source: OpenJarvis desktop app
+   OpenJarvis global theme — OpenClaw-inspired, dark-first
+   Palette: zinc/space neutrals + cyan accent + amber secondary
    ============================================================ */
 
-/* ---------- CSS custom properties — light (default) ---------- */
+/* ---------- Tokens — DARK is the default (dark-first) ---------- */
 :root {
-  /* backgrounds */
-  --color-bg:           #fafafa;
-  --color-bg-alt:       #f9f9f9;
-  --color-surface:      #ffffff;
+  /* backgrounds (deep space) */
+  --color-bg:            #05080f;
+  --color-bg-alt:        #080c15;
+  --color-surface:       #0e141f;
+  --color-surface-strong:#141c2a;
 
   /* text */
-  --color-text:         #09090b;
-  --color-text-secondary: #52525b;
-  --color-text-tertiary:  #71717a;
+  --color-text:          #e9eef6;
+  --color-text-secondary:#9aabc0;
+  --color-text-tertiary: #65788f;
 
-  /* accent (cyan-600) */
-  --color-accent:       #0891b2;
-  --color-accent-hover: #0e7490;
+  /* accent — cyan (brightened for dark) + amber secondary */
+  --color-accent:        #22d3ee;
+  --color-accent-hover:  #67e8f9;
+  --color-accent-deep:   #0891b2;
+  --color-amber:         #f59e0b;
 
-  /* amber */
-  --color-amber:        #f59e0b;
+  /* borders */
+  --color-border:        #1b2535;
+  --color-border-accent: color-mix(in srgb, var(--color-accent) 42%, transparent);
 
-  /* border */
-  --color-border:       #e4e4e7;
+  /* effects */
+  --logo-glow:           color-mix(in srgb, var(--color-accent) 55%, transparent);
+  --grad-start:          #22d3ee;
+  --grad-end:            #2dd4bf;
+  --glow-soft:           color-mix(in srgb, var(--color-accent) 16%, transparent);
 
   /* radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-sm: 6px;
+  --radius-md: 9px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
 
-  /* type scale */
+  /* type */
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
                'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Clash Display', var(--font-sans);
   --font-mono: ui-monospace, 'Cascadia Code', 'Fira Code', 'Jetbrains Mono',
                Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* ---------- CSS custom properties — dark override ---------- */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg:           #09090b;   /* zinc-950 */
-    --color-bg-alt:       #111113;
-    --color-surface:      #18181b;   /* zinc-900 */
+/* ---------- LIGHT override (toggle) ---------- */
+:root[data-theme='light'] {
+  --color-bg:            #fafafa;
+  --color-bg-alt:        #f3f5f8;
+  --color-surface:       #ffffff;
+  --color-surface-strong:#ffffff;
 
-    --color-text:         #fafafa;
-    --color-text-secondary: #a1a1aa; /* zinc-400 */
-    --color-text-tertiary:  #71717a; /* zinc-500 */
+  --color-text:          #09090b;
+  --color-text-secondary:#52525b;
+  --color-text-tertiary: #71717a;
 
-    --color-accent:       #0891b2;
-    --color-accent-hover: #22d3ee;   /* bump brighter on dark bg */
+  --color-accent:        #0891b2;
+  --color-accent-hover:  #0e7490;
+  --color-accent-deep:   #0891b2;
+  --color-amber:         #d97706;
 
-    --color-amber:        #f59e0b;
+  --color-border:        #e4e4e7;
+  --color-border-accent: color-mix(in srgb, var(--color-accent) 45%, transparent);
 
-    --color-border:       #27272a;   /* zinc-800 */
-  }
+  --logo-glow:           color-mix(in srgb, var(--color-accent) 28%, transparent);
+  --grad-start:          #0891b2;
+  --grad-end:            #0d9488;
+  --glow-soft:           color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
 /* ---------- Box-sizing reset ---------- */
 *,
 *::before,
-*::after {
-  box-sizing: border-box;
-}
+*::after { box-sizing: border-box; }
 
 /* ---------- Base document ---------- */
 html {
@@ -79,22 +91,114 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* ---------- Base typography ---------- */
+/* ---------- Space background layers (dark only) ---------- */
+.bg-nebula,
+.bg-stars {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.bg-nebula {
+  background:
+    radial-gradient(60% 50% at 50% -8%,
+      color-mix(in srgb, var(--color-accent) 16%, transparent) 0%, transparent 70%),
+    radial-gradient(45% 40% at 88% 6%,
+      color-mix(in srgb, var(--color-amber) 9%, transparent) 0%, transparent 65%),
+    radial-gradient(50% 45% at 8% 18%,
+      color-mix(in srgb, var(--color-accent) 8%, transparent) 0%, transparent 60%);
+}
+
+.bg-stars {
+  top: -12%;
+  bottom: auto;
+  height: 124%;
+  opacity: 0.6;
+  animation: star-drift 90s ease-in-out infinite alternate,
+             star-twinkle 8s ease-in-out infinite;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #fff, transparent),
+    radial-gradient(1px 1px at 27% 42%, #cfe9ff, transparent),
+    radial-gradient(1px 1px at 41% 12%, #fff, transparent),
+    radial-gradient(1px 1px at 55% 33%, #bcd6ff, transparent),
+    radial-gradient(1px 1px at 68% 8%,  #fff, transparent),
+    radial-gradient(1px 1px at 73% 47%, #fff, transparent),
+    radial-gradient(1px 1px at 84% 24%, #d7ecff, transparent),
+    radial-gradient(1px 1px at 91% 39%, #fff, transparent),
+    radial-gradient(1px 1px at 18% 61%, #fff, transparent),
+    radial-gradient(1px 1px at 33% 78%, #c9e2ff, transparent),
+    radial-gradient(1px 1px at 47% 88%, #fff, transparent),
+    radial-gradient(1px 1px at 62% 67%, #fff, transparent),
+    radial-gradient(1px 1px at 79% 82%, #d7ecff, transparent),
+    radial-gradient(1px 1px at 95% 71%, #fff, transparent);
+  background-repeat: no-repeat;
+}
+
+:root[data-theme='light'] .bg-nebula { opacity: 0.5; }
+:root[data-theme='light'] .bg-stars { display: none; }
+
+@keyframes star-drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-9%); }
+}
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.7; }
+}
+
+/* ---------- Cursor-follow glow (pointer devices, dark mode pops most) ---------- */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 520px;
+  height: 520px;
+  margin: -260px 0 0 -260px;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  mix-blend-mode: screen;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--color-accent) 13%, transparent) 0%, transparent 62%);
+}
+:root[data-theme='light'] .cursor-glow {
+  mix-blend-mode: normal;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--color-accent) 8%, transparent) 0%, transparent 62%);
+}
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Typography ---------- */
 h1, h2, h3, h4, h5, h6 {
   margin: 0 0 0.5em;
-  font-weight: 700;
-  line-height: 1.2;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
   color: var(--color-text);
 }
 
 h1 { font-size: clamp(2rem, 5vw, 3rem); }
-h2 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
-h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.35rem); }
+h3 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); }
 h4 { font-size: 1.25rem; }
-h5 { font-size: 1.125rem; }
-h6 { font-size: 1rem; }
 
 p {
   margin: 0 0 1em;
@@ -103,19 +207,12 @@ p {
 
 a {
   color: var(--color-accent);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
   transition: color 0.15s ease;
 }
+a:hover { color: var(--color-accent-hover); }
 
-a:hover {
-  color: var(--color-accent-hover);
-}
-
-code,
-kbd,
-samp,
-pre {
+code, kbd, samp, pre {
   font-family: var(--font-mono);
   font-size: 0.9em;
 }
@@ -130,39 +227,32 @@ pre {
 }
 
 code:not(pre > code) {
-  background-color: var(--color-surface);
+  background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: 0.15em 0.4em;
+  color: var(--color-accent-hover);
 }
 
-img,
-video,
-svg {
-  display: block;
-  max-width: 100%;
-}
+img, video, svg { display: block; max-width: 100%; }
 
-ul,
-ol {
-  margin: 0 0 1em;
-  padding-left: 1.5em;
-  color: var(--color-text-secondary);
-}
+ul, ol { margin: 0 0 1em; padding-left: 1.5em; color: var(--color-text-secondary); }
 
-/* ---------- Layout utilities ---------- */
+/* ---------- Layout ---------- */
 .container {
-  max-width: 1100px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-/* ---------- Button base ---------- */
+.section { padding: 84px 0; position: relative; }
+
+/* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4em;
-  padding: 0.55em 1.25em;
+  gap: 0.5em;
+  padding: 0.62em 1.25em;
   border-radius: var(--radius-md);
   font-family: var(--font-sans);
   font-size: 0.95rem;
@@ -170,118 +260,103 @@ ol {
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: background-color 0.15s ease, color 0.15s ease,
-              border-color 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid transparent;
+  transition: background-color 0.16s ease, color 0.16s ease,
+              border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
   white-space: nowrap;
 }
+.btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
 
-.btn:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
-}
-
-/* Primary — accent fill */
 .btn-primary {
-  background-color: var(--color-accent);  /* #0891b2 */
-  color: #ffffff;
-  border-color: var(--color-accent);
-}
-
-.btn-primary:hover {
-  background-color: var(--color-accent-hover);  /* #0e7490 */
-  border-color: var(--color-accent-hover);
-  color: #ffffff;
-}
-
-/* Outline — transparent fill, accent border */
-.btn-outline {
-  background-color: transparent;
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
-.btn-outline:hover {
   background-color: var(--color-accent);
-  color: #ffffff;
+  color: #04121a;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 0 transparent, 0 8px 26px var(--glow-soft);
+}
+.btn-primary:hover {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: #04121a;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
-/* ---------- Misc helpers ---------- */
+.btn-outline {
+  background-color: color-mix(in srgb, var(--color-surface) 60%, transparent);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+.btn-outline:hover {
+  border-color: var(--color-border-accent);
+  color: var(--color-text);
+  background-color: var(--color-surface-strong);
+}
+
+/* ---------- Shared: section header with chevron ---------- */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2.25rem;
+}
+.section-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0;
+}
+.section-chevron {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-shadow: 0 0 16px var(--logo-glow);
+}
+.section-kicker {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 0.6rem;
+}
+.section-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+.section-link:hover { color: var(--color-accent); }
+
+/* ---------- Theme-toggle icon swap (dark default → show sun) ---------- */
+.theme-toggle .icon-moon { display: none; }
+.theme-toggle .icon-sun { display: block; }
+:root[data-theme='light'] .theme-toggle .icon-moon { display: block; }
+:root[data-theme='light'] .theme-toggle .icon-sun { display: none; }
+
+/* ---------- Helpers ---------- */
 .sr-only {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border-width: 0;
 }
 
-/* ---------- Responsive: collapse grids to 1 column under 720px ---------- */
-@media (max-width: 720px) {
-  /* Any grid that uses auto-fill / auto-fit collapses to single column */
-  [class*="grid"],
-  .gallery,
-  .cta-grid,
-  .stats {
+/* ---------- Responsive ---------- */
+@media (max-width: 760px) {
+  [class*="grid"], .gallery, .cta-grid, .stats {
     grid-template-columns: 1fr !important;
   }
-
-  /* Container padding tightens on small screens */
-  .container {
-    padding: 0 16px;
-  }
-
-  /* Section vertical rhythm tightens */
-  .section {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
-
-  /* Hero adjustments */
-  .hero {
-    padding: 48px 0 40px;
-  }
-
-  /* Footer brand goes full width */
-  .footer-brand {
-    max-width: 100%;
-  }
+  .container { padding: 0 16px; }
+  .section { padding: 56px 0; }
+  .section-header { flex-wrap: wrap; }
 }
 
-/* ---------- Dark mode: ensure surfaces, cards, terminal, footer read correctly ---------- */
-@media (prefers-color-scheme: dark) {
-  /* Section alternating backgrounds */
-  .section:nth-child(even) {
-    background-color: var(--color-bg-alt);
-  }
-
-  /* Cards / surfaces pick up the dark surface token automatically via var(--color-surface),
-     but we reinforce border visibility */
-  .gallery-item,
-  .stat-card,
-  .cta-card,
-  .code-pill-wrap,
-  .arch-wrap,
-  pre {
-    border-color: var(--color-border);
-  }
-
-  /* Sticky nav: slightly more opaque on dark so content doesn't bleed through */
-  .site-header {
-    background-color: color-mix(in srgb, var(--color-bg) 90%, transparent);
-  }
-
-  /* Footer background reinforcement */
-  .site-footer {
-    background-color: var(--color-bg-alt);
-    border-top-color: var(--color-border);
-  }
-
-  /* Footer bottom bar */
-  .footer-bottom {
-    border-top-color: var(--color-border);
-  }
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+  html { scroll-behavior: auto; }
 }

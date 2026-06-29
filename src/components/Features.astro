@@ -4,11 +4,26 @@ import Section from './Section.astro';
 import FeatureCard from './FeatureCard.astro';
 
 const items = (await getCollection('features')).sort((a, b) => a.data.order - b.data.order);
+
+// Map each primitive (by order) to its icon glyph in FeatureCard.
+const iconByOrder: Record<number, string> = {
+  1: 'intelligence',
+  2: 'engine',
+  3: 'agents',
+  4: 'tools',
+  5: 'learning',
+};
 ---
 
-<Section id="features" title="Five primitives for personal AI" kicker="What's inside">
+<Section id="features" title="Five primitives for personal AI">
   <div class="grid">
-    {items.map((f) => <FeatureCard title={f.data.title} summary={f.data.summary} />)}
+    {items.map((f) => (
+      <FeatureCard
+        title={f.data.title}
+        summary={f.data.summary}
+        icon={iconByOrder[f.data.order] ?? 'intelligence'}
+      />
+    ))}
   </div>
 </Section>
 

@@ -3,7 +3,7 @@ import Section from './Section.astro';
 import { site } from '../config/site';
 ---
 
-<Section id="research" title="Backed by research" kicker="Research">
+<Section id="research" title="Backed by research" link={site.links.paper} linkText="Read the paper" external>
   <div class="research-body">
     <p class="blurb">
       OpenJarvis is developed as part of a Stanford research program on local-first personal AI.
@@ -11,13 +11,17 @@ import { site } from '../config/site';
     </p>
 
     <div class="stats">
-      <div class="stat-card">
+      <div class="stat">
         <span class="stat-number">88.7%</span>
         <span class="stat-label">of single-turn queries handled locally — no cloud round-trip</span>
       </div>
-      <div class="stat-card">
+      <div class="stat">
         <span class="stat-number">5.3×</span>
         <span class="stat-label">efficiency improvement from 2023 to 2025</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">0</span>
+        <span class="stat-label">cloud calls needed to run fully on-device — your data stays put</span>
       </div>
     </div>
 
@@ -58,31 +62,51 @@ import { site } from '../config/site';
 
   .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.25rem;
-  }
-
-  .stat-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 1.5rem 1.75rem;
+    overflow: hidden;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.75rem 2rem;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .stat:first-child {
+    border-left: none;
   }
 
   .stat-number {
-    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
     font-weight: 800;
+    letter-spacing: -0.03em;
     color: var(--color-accent);
     line-height: 1;
   }
 
   .stat-label {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     color: var(--color-text-secondary);
     line-height: 1.5;
+  }
+
+  /* On narrow screens the auto-fit grid wraps to a single column; switch the
+     dividers from vertical to horizontal so they still read as a stacked band. */
+  @media (max-width: 720px) {
+    .stat {
+      border-left: none;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .stat:first-child {
+      border-top: none;
+    }
   }
 
   .actions {
