@@ -13,8 +13,117 @@ const { title = site.name, description = site.subhead } = Astro.props;
     <meta property="og:title" content={site.name} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+    {/* No-flash theme: dark-first. Saved choice wins; otherwise default to dark. */}
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          var theme = saved === 'light' || saved === 'dark' ? saved : 'dark';
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
   </head>
-  <body><slot /></body>
+  <body>
+    <div class="bg-nebula" aria-hidden="true"></div>
+    <div class="bg-stars" aria-hidden="true"></div>
+    <div class="cursor-glow" aria-hidden="true"></div>
+    <slot />
+    <script>
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 1) Scroll-reveal with light stagger
+      if (!reduce && 'IntersectionObserver' in window) {
+        const sel = [
+          '.hero-inner > *', '.section-header', '.feature-card', '.gallery-item',
+          '.ww-group', '.stat', '.cta-card', '.code-block', '.qs-note', '.ww-intro',
+          '.blurb', '.community-intro', '.how-body > *', '.actions',
+        ].join(', ');
+        const els = Array.from(document.querySelectorAll<HTMLElement>(sel));
+        els.forEach((el) => el.classList.add('reveal'));
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('in');
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        els.forEach((el) => {
+          const sibs = el.parentElement
+            ? Array.from(el.parentElement.children).filter((c) => c.classList.contains('reveal'))
+            : [el];
+          el.style.transitionDelay = Math.min(sibs.indexOf(el), 6) * 55 + 'ms';
+          io.observe(el);
+        });
+        // Safety net: never leave content hidden if the observer doesn't fire.
+        setTimeout(() => els.forEach((el) => el.classList.add('in')), 2600);
+      }
+
+      // 2) Count-up on the research stats
+      const nums = Array.from(document.querySelectorAll<HTMLElement>('.stat-number'));
+      if (nums.length && 'IntersectionObserver' in window) {
+        const run = (el: HTMLElement) => {
+          const raw = (el.dataset.target ?? el.textContent ?? '').trim();
+          const m = raw.match(/^([\d.,]+)(.*)$/);
+          if (!m) return;
+          const target = parseFloat(m[1].replace(/,/g, ''));
+          const suffix = m[2] ?? '';
+          const decimals = (m[1].split('.')[1] ?? '').length;
+          if (reduce || !isFinite(target)) { el.textContent = raw; return; }
+          const dur = 1200;
+          let start: number | null = null;
+          const step = (t: number) => {
+            if (start === null) start = t;
+            const p = Math.min((t - start) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = (target * eased).toFixed(decimals) + suffix;
+            if (p < 1) requestAnimationFrame(step);
+            else el.textContent = target.toFixed(decimals) + suffix;
+          };
+          requestAnimationFrame(step);
+        };
+        nums.forEach((el) => (el.dataset.target = (el.textContent ?? '').trim()));
+        const io2 = new IntersectionObserver(
+          (entries) => entries.forEach((e) => {
+            if (e.isIntersecting) { run(e.target as HTMLElement); io2.unobserve(e.target); }
+          }),
+          { threshold: 0.4 },
+        );
+        nums.forEach((el) => io2.observe(el));
+      }
+
+      // 3) Cursor-follow glow (fine pointers only)
+      if (!reduce && matchMedia('(pointer: fine)').matches) {
+        const glow = document.querySelector<HTMLElement>('.cursor-glow');
+        if (glow) {
+          let x = innerWidth / 2, y = innerHeight / 2, tx = x, ty = y, raf = 0, shown = false;
+          const loop = () => {
+            x += (tx - x) * 0.15;
+            y += (ty - y) * 0.15;
+            glow.style.transform = `translate(${x}px, ${y}px)`;
+            raf = Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5 ? requestAnimationFrame(loop) : 0;
+          };
+          addEventListener('mousemove', (e) => {
+            tx = e.clientX; ty = e.clientY;
+            if (!shown) { glow.style.opacity = '1'; shown = true; }
+            if (!raf) raf = requestAnimationFrame(loop);
+          }, { passive: true });
+          addEventListener('mouseleave', () => { glow.style.opacity = '0'; shown = false; });
+        }
+      }
+    </script>
+  </body>
 </html>

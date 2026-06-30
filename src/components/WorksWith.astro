@@ -1,0 +1,112 @@
+---
+import Section from './Section.astro';
+import { site } from '../config/site';
+
+// Real engines, runtimes and protocols OpenJarvis supports (from the docs).
+const engines = ['Ollama', 'vLLM', 'SGLang', 'llama.cpp', 'Cloud APIs'];
+const hardware = ['Apple Silicon', 'NVIDIA', 'AMD', 'NPUs', 'CPUs'];
+const protocols = ['MCP servers', 'OpenAI-compatible API', 'Web search', 'Code interpreter', 'Retrieval'];
+---
+
+<Section id="works-with" title="Runs on your stack" link={site.links.docs} linkText="See all backends" external>
+  <p class="ww-intro">
+    Auto-detects your hardware and runs through whichever inference engine fits — no rewrites.
+    Everything below is built in.
+  </p>
+
+  <div class="ww-group">
+    <span class="ww-label">Engines</span>
+    <div class="ww-pills">
+      {engines.map((name) => (
+        <span class="pill"><span class="pill-dot" aria-hidden="true"></span>{name}</span>
+      ))}
+    </div>
+  </div>
+
+  <div class="ww-group">
+    <span class="ww-label">Hardware</span>
+    <div class="ww-pills">
+      {hardware.map((name) => (
+        <span class="pill pill-amber"><span class="pill-dot" aria-hidden="true"></span>{name}</span>
+      ))}
+    </div>
+  </div>
+
+  <div class="ww-group">
+    <span class="ww-label">Tools &amp; protocols</span>
+    <div class="ww-pills">
+      {protocols.map((name) => (
+        <span class="pill"><span class="pill-dot" aria-hidden="true"></span>{name}</span>
+      ))}
+    </div>
+  </div>
+</Section>
+
+<style>
+  .ww-intro {
+    max-width: 62ch;
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin: 0 0 2rem;
+  }
+
+  .ww-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .ww-group:last-child { border-bottom: 1px solid var(--color-border); }
+
+  .ww-label {
+    flex: 0 0 140px;
+    padding-top: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+  }
+
+  .ww-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+  }
+  .pill:hover {
+    border-color: var(--color-border-accent);
+    transform: translateY(-2px);
+    background: var(--color-surface-strong);
+  }
+  .pill-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 8px var(--logo-glow);
+  }
+  .pill-amber .pill-dot {
+    background: var(--color-amber);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-amber) 55%, transparent);
+  }
+
+  @media (max-width: 620px) {
+    .ww-group { flex-direction: column; gap: 0.75rem; }
+    .ww-label { flex-basis: auto; padding-top: 0; }
+  }
+</style>

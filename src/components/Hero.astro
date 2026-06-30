@@ -1,39 +1,49 @@
 ---
 import { site } from '../config/site';
-import Terminal from './Terminal.astro';
+
+const metaChips = site.footerNote.split('·').map((s) => s.trim());
 ---
 
-<section class="hero">
+<header class="hero">
   <div class="hero-inner container">
-    <h1 class="hero-heading">
-      Personal AI,<br />On Personal Devices
-    </h1>
+    <img class="hero-mark" src="/logo-mark.png" alt="" width="104" height="104" aria-hidden="true" />
 
-    <p class="hero-subhead">{site.subhead}</p>
+    <h1 class="hero-wordmark">OpenJarvis</h1>
+
+    <p class="hero-tagline">{site.tagline}</p>
+
+    <p class="hero-desc">{site.subhead}</p>
 
     <div class="hero-ctas">
-      <a href="#quickstart" class="btn btn-primary">Get Started</a>
-      <a
-        href={site.links.github}
-        class="btn btn-outline"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href="#quickstart" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M13 2 4.5 13.5H11l-1 8.5 9.5-13H13l1-7z"></path>
+        </svg>
+        Get Started
+      </a>
+      <a href={site.links.github} class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12 24 5.373 18.627 0 12 0z"></path>
+        </svg>
         View on GitHub
       </a>
     </div>
 
-    <div class="hero-terminal">
-      <Terminal />
-    </div>
-
-    <p class="hero-footer-note">{site.footerNote}</p>
+    <p class="hero-meta">
+      {metaChips.map((chip, i) => (
+        <>
+          {i > 0 && <span class="hero-meta-sep" aria-hidden="true">·</span>}
+          <span>{chip}</span>
+        </>
+      ))}
+    </p>
   </div>
-</section>
+</header>
 
 <style>
   .hero {
-    padding: 72px 0 64px;
+    position: relative;
+    padding: 96px 0 72px;
     text-align: center;
   }
 
@@ -41,22 +51,50 @@ import Terminal from './Terminal.astro';
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0;
   }
 
-  .hero-heading {
-    font-size: clamp(2.4rem, 6vw, 3.5rem);
-    font-weight: 800;
+  .hero-mark {
+    width: 104px;
+    height: 104px;
+    filter: drop-shadow(0 0 34px var(--logo-glow));
+    margin-bottom: 1.4rem;
+    animation: hero-float 6s ease-in-out infinite;
+  }
+
+  @keyframes hero-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .hero-wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(3rem, 9vw, 5.5rem);
+    line-height: 1;
     letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin: 0 0 0.6em;
+    margin: 0 0 1rem;
+    background: linear-gradient(120deg, var(--grad-start) 0%, var(--grad-end) 60%, var(--color-amber) 130%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
 
-  .hero-subhead {
-    font-size: clamp(1rem, 2vw, 1.2rem);
+  .hero-tagline {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 1.5rem;
+  }
+
+  .hero-desc {
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
     color: var(--color-text-secondary);
-    margin: 0 0 2rem;
-    max-width: 520px;
+    max-width: 560px;
+    line-height: 1.65;
+    margin: 0 0 2.25rem;
   }
 
   .hero-ctas {
@@ -64,19 +102,19 @@ import Terminal from './Terminal.astro';
     flex-wrap: wrap;
     gap: 0.75rem;
     justify-content: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.25rem;
   }
+  .hero-ctas .btn { padding: 0.72em 1.45em; font-size: 1rem; }
 
-  .hero-terminal {
+  .hero-meta {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
-    width: 100%;
-    margin-bottom: 1.75rem;
-  }
-
-  .hero-footer-note {
-    font-size: 0.8rem;
-    color: var(--color-text-tertiary);
+    gap: 0.5rem;
     margin: 0;
+    font-size: 0.82rem;
+    color: var(--color-text-tertiary);
   }
+  .hero-meta-sep { color: var(--color-border); }
 </style>

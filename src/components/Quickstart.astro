@@ -3,80 +3,204 @@ import Section from './Section.astro';
 import { site } from '../config/site';
 ---
 
-<Section id="quickstart" title="Get started in one command" kicker="Install">
-  <div class="qs-body">
-    <div class="code-pill-wrap">
-      <code class="code-pill" id="install-cmd">{site.install}</code>
-      <button
-        id="copy-install-btn-qs"
-        class="btn btn-outline copy-btn"
-        data-install={site.install}
-        aria-label="Copy install command"
-      >
-        Copy
-      </button>
+<Section id="quickstart" title="Quick Start">
+  <div class="code-block">
+    <div class="code-header">
+      <span class="dot dot-red"></span>
+      <span class="dot dot-yellow"></span>
+      <span class="dot dot-green"></span>
+      <div class="mode-switch" role="tablist" aria-label="Quickstart steps">
+        <button class="mode-btn active" data-mode="install" role="tab" aria-selected="true">Install</button>
+        <button class="mode-btn" data-mode="ask" role="tab" aria-selected="false">Ask</button>
+        <button class="mode-btn" data-mode="serve" role="tab" aria-selected="false">Serve</button>
+      </div>
     </div>
-    <a
-      href={site.links.docs}
-      class="btn btn-primary docs-link"
-      target="_blank"
-      rel="noopener"
-    >
-      Read the full docs →
-    </a>
+
+    <div class="code-body">
+      <!-- Install -->
+      <div class="code-content" data-content="install">
+        <div class="code-line comment"># One command — installs everything for your hardware</div>
+        <div class="code-line cmd">
+          <span class="prompt">$</span>
+          <span class="ctext">{site.install}</span>
+          <button class="copy-line" data-copy={site.install} aria-label="Copy command">
+            <svg class="ic-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <svg class="ic-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Ask -->
+      <div class="code-content" data-content="ask" hidden>
+        <div class="code-line comment"># One-time setup &amp; local model pull</div>
+        <div class="code-line cmd">
+          <span class="prompt">$</span>
+          <span class="ctext">jarvis init</span>
+          <button class="copy-line" data-copy="jarvis init" aria-label="Copy command">
+            <svg class="ic-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <svg class="ic-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+        <div class="code-line cmd">
+          <span class="prompt">$</span>
+          <span class="ctext">jarvis ask <span class="arg">"what's on my calendar today?"</span></span>
+          <button class="copy-line" data-copy={'jarvis ask "what\'s on my calendar today?"'} aria-label="Copy command">
+            <svg class="ic-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <svg class="ic-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+        <div class="code-line out">&rarr; answered locally on your GPU · 0 cloud calls · 1.2s</div>
+      </div>
+
+      <!-- Serve -->
+      <div class="code-content" data-content="serve" hidden>
+        <div class="code-line comment"># Expose an OpenAI-compatible API</div>
+        <div class="code-line cmd">
+          <span class="prompt">$</span>
+          <span class="ctext">jarvis serve</span>
+          <button class="copy-line" data-copy="jarvis serve" aria-label="Copy command">
+            <svg class="ic-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <svg class="ic-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+        <div class="code-line out">&rarr; live at http://localhost:8000</div>
+      </div>
+    </div>
   </div>
+
+  <p class="qs-note">
+    Runs entirely on your hardware — cloud APIs are optional. Switch models any time with
+    <code>jarvis models</code>.
+    <a href={site.links.docs} target="_blank" rel="noopener noreferrer">Read the full docs &rarr;</a>
+  </p>
 </Section>
 
 <script>
   import { copyText } from '../lib/clipboard';
 
-  const btn = document.querySelector<HTMLButtonElement>('#copy-install-btn-qs');
-  if (btn) {
-    btn.addEventListener('click', async () => {
-      const text = btn.dataset.install ?? '';
-      await copyText(text);
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+  const root = document.getElementById('quickstart');
+  if (root) {
+    const tabs = root.querySelectorAll<HTMLButtonElement>('.mode-btn');
+    const panels = root.querySelectorAll<HTMLElement>('.code-content');
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const mode = tab.dataset.mode;
+        tabs.forEach((t) => {
+          const on = t === tab;
+          t.classList.toggle('active', on);
+          t.setAttribute('aria-selected', String(on));
+        });
+        panels.forEach((p) => { p.hidden = p.dataset.content !== mode; });
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('.copy-line').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const ok = await copyText(btn.dataset.copy ?? '');
+        if (!ok) return;
+        const copy = btn.querySelector<SVGElement>('.ic-copy');
+        const check = btn.querySelector<SVGElement>('.ic-check');
+        if (copy && check) {
+          copy.hidden = true;
+          check.hidden = false;
+          btn.classList.add('copied');
+          setTimeout(() => {
+            copy.hidden = false;
+            check.hidden = true;
+            btn.classList.remove('copied');
+          }, 1400);
+        }
+      });
     });
   }
 </script>
 
 <style>
-  .qs-body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
+  /* The terminal is always dark — internals use fixed colors, not theme tokens. */
+  .code-block {
+    max-width: 760px;
+    border: 1px solid #1c2a3d;
+    border-radius: var(--radius-lg);
+    background: #080b12;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px color-mix(in srgb, var(--color-accent) 10%, transparent);
   }
 
-  .code-pill-wrap {
+  .code-header {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    gap: 1rem;
     padding: 0.75rem 1rem;
+    border-bottom: 1px solid #16202e;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .dot-red { background: #ff5f56; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green { background: #27c93f; }
+
+  .mode-switch {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: auto;
     flex-wrap: wrap;
   }
+  .mode-btn {
+    padding: 0.3em 0.8em;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: #7d8b9c;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .mode-btn:hover { color: #b9c6d6; }
+  .mode-btn.active {
+    color: #22d3ee;
+    background: rgba(34, 211, 238, 0.12);
+    border-color: rgba(34, 211, 238, 0.4);
+  }
 
-  .code-pill {
+  .code-body {
+    padding: 1.1rem 1.25rem 1.25rem;
     font-family: var(--font-mono);
-    font-size: 0.95rem;
-    color: var(--color-accent);
-    background: none;
-    border: none;
-    padding: 0;
-    white-space: nowrap;
+    font-size: 0.88rem;
+    line-height: 1.85;
+    overflow-x: auto;
   }
+  .code-line { white-space: pre; display: flex; align-items: center; gap: 0.55ch; }
+  .code-line.comment { color: #6b7a8c; }
+  .code-line.out { color: #6b7a8c; }
+  .prompt { color: #22d3ee; }
+  .ctext { color: #e6eef4; }
+  .arg { color: #e7c87a; }
 
-  .copy-btn {
+  .copy-line {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px; height: 26px;
+    border: 1px solid #1f2c3d;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: #7d8b9c;
+    cursor: pointer;
     flex-shrink: 0;
-    font-size: 0.85rem;
-    padding: 0.35em 0.85em;
+    transition: color 0.15s ease, border-color 0.15s ease;
   }
+  .copy-line:hover { color: #22d3ee; border-color: rgba(34, 211, 238, 0.4); }
+  .copy-line.copied { color: #22d3ee; }
 
-  .docs-link {
-    font-size: 0.95rem;
+  .qs-note {
+    margin: 1.5rem 0 0;
+    font-size: 0.92rem;
+    color: var(--color-text-secondary);
+    max-width: 760px;
   }
+  .qs-note a { font-weight: 600; margin-left: 0.35rem; white-space: nowrap; }
 </style>
