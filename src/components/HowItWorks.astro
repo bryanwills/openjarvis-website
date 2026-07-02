@@ -12,6 +12,10 @@ import Section from './Section.astro';
       entirely on your hardware or routes selectively to the cloud.
     </p>
     <div class="arch-wrap">
+      <div class="arch-chrome" aria-hidden="true">
+        <span class="adot"></span><span class="adot"></span><span class="adot"></span>
+        <span class="arch-filename">OpenJarvis_Architecture.png</span>
+      </div>
       <img
         src="/architecture.png"
         alt="OpenJarvis architecture diagram showing the composable primitives: engine, agents, tools, memory, skills, recipes, and scheduler"
@@ -42,6 +46,27 @@ import Section from './Section.astro';
     border-radius: var(--radius-lg);
     overflow: hidden;
     background-color: var(--color-surface);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35),
+                0 0 0 1px color-mix(in srgb, var(--color-accent) 7%, transparent);
+  }
+
+  .arch-chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.65rem 0.9rem;
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-surface-strong) 80%, transparent);
+  }
+  .adot { width: 10px; height: 10px; border-radius: 50%; }
+  .adot:nth-child(1) { background: #ff5f56; }
+  .adot:nth-child(2) { background: #ffbd2e; }
+  .adot:nth-child(3) { background: #27c93f; }
+  .arch-filename {
+    margin-left: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
   }
 
   .arch-img {
