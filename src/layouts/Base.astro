@@ -50,11 +50,13 @@ const { title = site.name, description = site.subhead } = Astro.props;
         ].join(', ');
         const els = Array.from(document.querySelectorAll<HTMLElement>(sel));
         els.forEach((el) => el.classList.add('reveal'));
+        let anyRevealed = false;
         const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((e) => {
               if (e.isIntersecting) {
                 e.target.classList.add('in');
+                anyRevealed = true;
                 io.unobserve(e.target);
               }
             });
@@ -68,8 +70,12 @@ const { title = site.name, description = site.subhead } = Astro.props;
           el.style.transitionDelay = Math.min(sibs.indexOf(el), 6) * 55 + 'ms';
           io.observe(el);
         });
-        // Safety net: never leave content hidden if the observer doesn't fire.
-        setTimeout(() => els.forEach((el) => el.classList.add('in')), 2600);
+        // Safety net: if the observer never fires at all (broken/blocked), reveal
+        // everything rather than leaving the page blank. When it works, trust it —
+        // below-fold content should still reveal on scroll.
+        setTimeout(() => {
+          if (!anyRevealed) els.forEach((el) => el.classList.add('in'));
+        }, 2600);
       }
 
       // 2) Count-up on the research stats
