@@ -6,7 +6,11 @@ const metaChips = site.footerNote.split('·').map((s) => s.trim());
 
 <header class="hero">
   <div class="hero-inner container">
-    <img class="hero-mark" src="/logo-mark.png" alt="" width="104" height="104" aria-hidden="true" />
+    <div class="hero-mark-wrap" aria-hidden="true">
+      <span class="hero-orbit hero-orbit-outer"></span>
+      <span class="hero-orbit hero-orbit-inner"></span>
+      <img class="hero-mark" src="/logo-mark.png" alt="" width="104" height="104" />
+    </div>
 
     <h1 class="hero-wordmark">OpenJarvis</h1>
 
@@ -30,11 +34,8 @@ const metaChips = site.footerNote.split('·').map((s) => s.trim());
     </div>
 
     <p class="hero-meta">
-      {metaChips.map((chip, i) => (
-        <>
-          {i > 0 && <span class="hero-meta-sep" aria-hidden="true">·</span>}
-          <span>{chip}</span>
-        </>
+      {metaChips.map((chip) => (
+        <span class="hero-meta-chip">{chip}</span>
       ))}
     </p>
   </div>
@@ -53,12 +54,50 @@ const metaChips = site.footerNote.split('·').map((s) => s.trim());
     align-items: center;
   }
 
+  .hero-mark-wrap {
+    position: relative;
+    display: inline-flex;
+    margin-bottom: 1.6rem;
+    animation: hero-float 6s ease-in-out infinite;
+  }
+
   .hero-mark {
     width: 104px;
     height: 104px;
     filter: drop-shadow(0 0 34px var(--logo-glow));
-    margin-bottom: 1.4rem;
-    animation: hero-float 6s ease-in-out infinite;
+  }
+
+  /* Orbital rings — a slow satellite dot on the outer, a faint dashed inner */
+  .hero-orbit {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-orbit-outer {
+    inset: -30px;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
+    animation: orbit-spin 16s linear infinite;
+  }
+  .hero-orbit-outer::before {
+    content: '';
+    position: absolute;
+    top: -3.5px;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    margin-left: -3.5px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 12px var(--color-accent);
+  }
+  .hero-orbit-inner {
+    inset: -16px;
+    border: 1px dashed color-mix(in srgb, var(--color-accent) 14%, transparent);
+    animation: orbit-spin 40s linear infinite reverse;
+  }
+
+  @keyframes orbit-spin {
+    to { transform: rotate(360deg); }
   }
 
   @keyframes hero-float {
@@ -113,8 +152,17 @@ const metaChips = site.footerNote.split('·').map((s) => s.trim());
     justify-content: center;
     gap: 0.5rem;
     margin: 0;
-    font-size: 0.82rem;
-    color: var(--color-text-tertiary);
   }
-  .hero-meta-sep { color: var(--color-border); }
+  .hero-meta-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.32em 0.85em;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+  }
 </style>

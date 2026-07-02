@@ -59,9 +59,20 @@ const glyph = icons[icon] ?? icons.intelligence;
 
   .feature-icon {
     display: inline-flex;
-    color: var(--color-accent);
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
     margin-bottom: 1rem;
-    filter: drop-shadow(0 0 10px var(--glow-soft));
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 24%, transparent);
+    box-shadow: 0 0 22px var(--glow-soft);
+    transition: transform 0.16s ease;
+  }
+  .feature-card:hover .feature-icon {
+    transform: scale(1.06);
   }
 
   .feature-title {

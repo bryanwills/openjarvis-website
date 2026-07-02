@@ -28,6 +28,7 @@ import { site } from '../config/site';
             <svg class="ic-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
         </div>
+        <div class="code-line" aria-hidden="true"><span class="prompt">$</span> <span class="caret"></span></div>
       </div>
 
       <!-- Ask -->
@@ -50,6 +51,7 @@ import { site } from '../config/site';
           </button>
         </div>
         <div class="code-line out">&rarr; answered locally on your GPU · 0 cloud calls · 1.2s</div>
+        <div class="code-line" aria-hidden="true"><span class="prompt">$</span> <span class="caret"></span></div>
       </div>
 
       <!-- Serve -->
@@ -64,6 +66,7 @@ import { site } from '../config/site';
           </button>
         </div>
         <div class="code-line out">&rarr; live at http://localhost:8000</div>
+        <div class="code-line" aria-hidden="true"><span class="prompt">$</span> <span class="caret"></span></div>
       </div>
     </div>
   </div>
@@ -195,6 +198,18 @@ import { site } from '../config/site';
   }
   .copy-line:hover { color: #22d3ee; border-color: rgba(34, 211, 238, 0.4); }
   .copy-line.copied { color: #22d3ee; }
+
+  .caret {
+    display: inline-block;
+    width: 9px;
+    height: 1.1em;
+    background: #22d3ee;
+    vertical-align: text-bottom;
+    animation: caret-blink 1.1s steps(1, end) infinite;
+  }
+  @keyframes caret-blink {
+    50% { opacity: 0; }
+  }
 
   .qs-note {
     margin: 1.5rem 0 0;
