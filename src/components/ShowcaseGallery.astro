@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Section from './Section.astro';
+import { site } from '../config/site';
 
 const items = (await getCollection('showcase')).sort((a, b) => a.data.order - b.data.order);
 
@@ -17,7 +18,13 @@ const icons: Record<number, string> = {
 <Section id="showcase" title="See it in action" link="#community" linkText="Build your own">
   <div class="gallery">
     {items.map((item) => (
-      <figure class="gallery-item">
+      <a
+        class="gallery-item"
+        href={`${site.links.docs}showcase/${item.id}/`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${item.data.title} — read the walkthrough in the docs`}
+      >
         <div class="shot">
           <div class="shot-chrome" aria-hidden="true">
             <span class="cdot"></span><span class="cdot"></span><span class="cdot"></span>
@@ -26,11 +33,14 @@ const icons: Record<number, string> = {
             <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={icons[item.data.order] ?? icons[1]} />
           </span>
         </div>
-        <figcaption>
-          <strong class="caption-title">{item.data.title}</strong>
+        <div class="caption">
+          <strong class="caption-title">
+            {item.data.title}
+            <span class="caption-arrow" aria-hidden="true">&rarr;</span>
+          </strong>
           <span class="caption-summary">{item.data.summary}</span>
-        </figcaption>
-      </figure>
+        </div>
+      </a>
     ))}
   </div>
 </Section>
@@ -50,6 +60,8 @@ const icons: Record<number, string> = {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     overflow: hidden;
+    text-decoration: none;
+    color: inherit;
     transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
   }
   .gallery-item:hover {
@@ -115,12 +127,28 @@ const icons: Record<number, string> = {
     box-shadow: 0 0 30px var(--glow-soft);
   }
 
-  figcaption {
+  .caption {
     padding: 1rem 1.1rem 1.15rem;
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
   }
-  .caption-title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+  .caption-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+  .caption-arrow {
+    color: var(--color-text-tertiary);
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+  .gallery-item:hover .caption-arrow {
+    color: var(--color-accent);
+    transform: translateX(3px);
+  }
   .caption-summary { font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.55; }
 </style>
