@@ -150,29 +150,6 @@ body {
   50% { opacity: 0.7; }
 }
 
-/* ---------- Cursor-follow glow (pointer devices, dark mode pops most) ---------- */
-.cursor-glow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 520px;
-  height: 520px;
-  margin: -260px 0 0 -260px;
-  z-index: -1;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  mix-blend-mode: screen;
-  background: radial-gradient(circle,
-    color-mix(in srgb, var(--color-accent) 13%, transparent) 0%, transparent 62%);
-}
-:root[data-theme='light'] .cursor-glow {
-  mix-blend-mode: normal;
-  background: radial-gradient(circle,
-    color-mix(in srgb, var(--color-accent) 8%, transparent) 0%, transparent 62%);
-}
-
 /* ---------- Scroll reveal ---------- */
 .reveal {
   opacity: 0;
