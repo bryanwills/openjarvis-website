@@ -43,7 +43,7 @@ project and funnels visitors to GitHub, the docs, Discord, downloads, and the pa
 ### DNS / Pages state
 
 - ✅ **DNS done:** Stanford NetDB created `openjarvis.stanford.edu` as a CNAME →
-  `open-jarvis.github.io` (request RITM00732263, fulfilled). Confirmed no conflicting
+  `open-jarvis.github.io` (request fulfilled). Confirmed no conflicting
   MX/TXT.
 - ⚠️ **Pending (human, org-admin):** the GitHub side is not wired yet — no repo currently
   claims the custom domain (`OpenJarvis` Pages `cname` is empty; no org-apex
