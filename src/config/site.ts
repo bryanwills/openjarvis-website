@@ -10,6 +10,6 @@ export const site = {
     releases: 'https://github.com/open-jarvis/OpenJarvis/releases',
     ipw: 'https://www.intelligence-per-watt.ai/',
   },
-  install: 'curl -fsSL open-jarvis.github.io/install.sh | bash',
+  install: 'curl -fsSL open-jarvis.github.io/OpenJarvis/install.sh | bash',
   footerNote: 'Local-first by default · A Stanford research project · Apache-2.0',
 } as const;
