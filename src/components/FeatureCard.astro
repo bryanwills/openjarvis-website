@@ -3,9 +3,10 @@ interface Props {
   title: string;
   summary: string;
   icon?: string;
+  size?: 'lg' | 'md';
 }
 
-const { title, summary, icon = 'intelligence' } = Astro.props;
+const { title, summary, icon = 'intelligence', size = 'md' } = Astro.props;
 
 const icons: Record<string, string> = {
   intelligence:
@@ -23,9 +24,9 @@ const icons: Record<string, string> = {
 const glyph = icons[icon] ?? icons.intelligence;
 ---
 
-<article class="feature-card">
+<article class:list={['feature-card', size === 'lg' && 'feature-card--lg']}>
   <span class="feature-icon" aria-hidden="true">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" set:html={glyph}></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" set:html={glyph}></svg>
   </span>
   <h3 class="feature-title">{title}</h3>
   <p class="feature-desc">{summary}</p>
@@ -34,46 +35,89 @@ const glyph = icons[icon] ?? icons.intelligence;
 <style>
   .feature-card {
     position: relative;
-    background: var(--color-surface);
+    grid-column: span 2;
+    background:
+      radial-gradient(circle at 14% 18%,
+        color-mix(in srgb, var(--color-accent) 9%, transparent), transparent 34%),
+      var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     padding: 1.6rem;
     transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
     overflow: hidden;
   }
-  .feature-card::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--color-accent), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.16s ease;
-  }
   .feature-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-1px);
     border-color: var(--color-border-accent);
-    box-shadow: 0 14px 36px color-mix(in srgb, var(--color-accent) 14%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-holo) 10%, transparent),
+                0 0 28px color-mix(in srgb, var(--color-holo) 12%, transparent);
   }
-  .feature-card:hover::before { opacity: 1; }
+
+  /* Wide bento cells */
+  .feature-card--lg {
+    grid-column: span 3;
+    padding: 2rem 2.1rem;
+  }
+  .feature-card--lg .feature-title { font-size: 1.4rem; }
+  .feature-card--lg .feature-desc { font-size: 1rem; max-width: 46ch; }
 
   .feature-icon {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 48px;
     height: 48px;
-    border-radius: 12px;
+    border-radius: 50%;
     margin-bottom: 1rem;
-    color: var(--color-accent);
-    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-accent) 24%, transparent);
-    box-shadow: 0 0 22px var(--glow-soft);
-    transition: transform 0.16s ease;
+    color: var(--color-holo);
+    background: radial-gradient(circle,
+      color-mix(in srgb, var(--color-holo) 14%, transparent) 0 34%,
+      color-mix(in srgb, var(--color-accent) 14%, transparent) 35% 100%);
+    border: 1px solid color-mix(in srgb, var(--color-holo) 38%, transparent);
+    box-shadow: 0 0 20px var(--glow-holo), inset 0 0 14px var(--glow-holo);
+    transition: transform 0.16s ease, color 0.16s ease;
+  }
+  .feature-icon svg {
+    position: relative;
+    z-index: 1;
+    width: 26px;
+    height: 26px;
+  }
+  /* Gimbal arc pair, echoing the hero reticle — it swings round on hover */
+  .feature-icon::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    border-top-color: color-mix(in srgb, var(--color-holo) 55%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--color-holo) 55%, transparent);
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  /* single tick at the top, so the swing is readable */
+  .feature-icon::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 1px;
+    height: 5px;
+    margin-left: -0.5px;
+    background: color-mix(in srgb, var(--color-holo) 70%, transparent);
   }
   .feature-card:hover .feature-icon {
-    transform: scale(1.06);
+    transform: scale(1.03);
+    color: var(--color-core);
   }
+  .feature-card:hover .feature-icon::before { transform: rotate(90deg); }
+
+  .feature-card--lg .feature-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1.15rem;
+  }
+  .feature-card--lg .feature-icon svg { width: 30px; height: 30px; }
 
   .feature-title {
     font-size: 1.15rem;
@@ -85,5 +129,23 @@ const glyph = icons[icon] ?? icons.intelligence;
     color: var(--color-text-secondary);
     margin: 0;
     line-height: 1.6;
+  }
+
+  /* 4-column grid: everything sits two-up */
+  @media (max-width: 1000px) and (min-width: 761px) {
+    .feature-card,
+    .feature-card--lg { grid-column: span 2; }
+    .feature-card--lg { padding: 1.6rem; }
+    .feature-card--lg .feature-title { font-size: 1.15rem; }
+  }
+
+  @media (max-width: 760px) {
+    .feature-card,
+    .feature-card--lg {
+      grid-column: auto;
+      padding: 1.5rem;
+    }
+    .feature-card--lg .feature-title { font-size: 1.15rem; }
+    .feature-card--lg .feature-desc { font-size: 0.93rem; }
   }
 </style>

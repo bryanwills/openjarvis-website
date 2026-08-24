@@ -16,9 +16,9 @@ const { title = site.name, description = site.subhead } = Astro.props;
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="color-scheme" content="dark light" />
-    <link rel="preconnect" href="https://api.fontshare.com" />
-    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
-    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     {/* No-flash theme: dark-first. Saved choice wins; otherwise default to dark. */}
     <script is:inline>
       (function () {
@@ -34,8 +34,8 @@ const { title = site.name, description = site.subhead } = Astro.props;
     </script>
   </head>
   <body>
-    <div class="bg-nebula" aria-hidden="true"></div>
-    <div class="bg-stars" aria-hidden="true"></div>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-scan" aria-hidden="true"></div>
     <slot />
     <script>
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -43,9 +43,9 @@ const { title = site.name, description = site.subhead } = Astro.props;
       // Scroll-reveal with light stagger
       if (!reduce && 'IntersectionObserver' in window) {
         const sel = [
-          '.hero-inner > *', '.section-header', '.feature-card', '.gallery-item',
-          '.ww-group', '.cta-card', '.code-block', '.qs-note', '.ww-intro',
-          '.community-intro',
+          '.hero-copy > *', '.hero-mark-wrap', '.section-header', '.feature-card',
+          '.gallery-item', '.ww-col', '.cta-card', '.qs-console', '.qs-note',
+          '.ww-intro', '.community-intro',
         ].join(', ');
         const els = Array.from(document.querySelectorAll<HTMLElement>(sel));
         els.forEach((el) => el.classList.add('reveal'));

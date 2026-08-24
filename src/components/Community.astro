@@ -3,7 +3,7 @@ import Section from './Section.astro';
 import { site } from '../config/site';
 ---
 
-<Section id="community" title="Join the community">
+<Section id="community" title="Join the community" index={5}>
   <p class="community-intro">
     OpenJarvis is open source and built in the open. Come say hi on Discord, star us on GitHub,
     or grab the desktop app and run your first local agent today.
@@ -82,11 +82,18 @@ import { site } from '../config/site';
     margin: 0 0 2rem;
   }
 
+  /* The download card becomes a tall panel on the left; the two link cards
+     stack beside it. DOM order is untouched, only the placement changes. */
   .cta-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: 1.4fr 1fr;
+    grid-template-rows: auto auto;
     gap: 1.25rem;
   }
+
+  .cta-card:nth-child(1) { grid-area: 1 / 2; }
+  .cta-card:nth-child(2) { grid-area: 2 / 2; }
+  .cta-card--accent { grid-area: 1 / 1 / span 2 / 2; }
 
   .cta-card {
     display: flex;
@@ -102,24 +109,36 @@ import { site } from '../config/site';
   }
 
   .cta-card:hover {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 15%, transparent);
-    transform: translateY(-2px);
+    border-color: var(--color-border-accent);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--color-holo) 11%, transparent);
+    transform: translateY(-1px);
     color: var(--color-text);
   }
 
   .cta-card--accent {
-    background-color: var(--color-accent);
-    border-color: var(--color-accent);
-    color: #04121a;
-    box-shadow: 0 10px 34px color-mix(in srgb, var(--color-accent) 28%, transparent);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: 12rem;
+    padding: 1.75rem 1.9rem;
+    background: var(--color-accent);
+    border-color: color-mix(in srgb, var(--color-holo) 28%, var(--color-accent));
+    color: var(--color-core);
+    box-shadow: 0 10px 34px color-mix(in srgb, var(--color-accent) 24%, transparent);
   }
+  .cta-card--accent .cta-text { flex: 0 0 auto; gap: 0.4rem; }
+  .cta-card--accent .cta-text strong { font-size: 1.3rem; line-height: 1.2; }
+  .cta-card--accent .cta-text span { font-size: 0.92rem; }
+  .cta-card--accent .cta-icon { opacity: 1; }
+  .cta-card--accent .cta-arrow { font-size: 1.35rem; align-self: flex-end; }
 
   .cta-card--accent:hover {
-    background-color: var(--color-accent-hover);
-    border-color: var(--color-accent-hover);
-    color: #04121a;
-    box-shadow: 0 14px 42px color-mix(in srgb, var(--color-accent) 38%, transparent);
+    background: var(--color-accent);
+    border-color: var(--color-holo);
+    color: var(--color-core);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-holo) 20%, transparent),
+                0 0 28px color-mix(in srgb, var(--color-holo) 28%, transparent);
   }
 
   .cta-icon {
@@ -158,5 +177,25 @@ import { site } from '../config/site';
   .cta-card:hover .cta-arrow {
     transform: translateX(3px);
     opacity: 1;
+  }
+
+  @media (max-width: 760px) {
+    .cta-grid { grid-template-rows: auto; }
+
+    .cta-card:nth-child(1),
+    .cta-card:nth-child(2),
+    .cta-card--accent { grid-area: auto; }
+
+    .cta-card--accent {
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1rem;
+      min-height: 0;
+      padding: 1.25rem 1.5rem;
+    }
+    .cta-card--accent .cta-text strong { font-size: 0.95rem; }
+    .cta-card--accent .cta-text span { font-size: 0.825rem; }
+    .cta-card--accent .cta-arrow { font-size: 1.1rem; align-self: auto; }
   }
 </style>
