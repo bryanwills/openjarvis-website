@@ -8,66 +8,79 @@ const hardware = ['Apple Silicon', 'NVIDIA', 'AMD', 'NPUs', 'CPUs'];
 const protocols = ['MCP servers', 'OpenAI-compatible API', 'Web search', 'Code interpreter', 'Retrieval'];
 ---
 
-<Section id="works-with" title="Runs on your stack" link={site.links.docs} linkText="See all backends" external>
+<Section id="works-with" title="Runs on your stack" index={3} link={site.links.docs} linkText="See all backends" external>
   <p class="ww-intro">
     OpenJarvis auto-detects your hardware and recommends the best-fit engine. The same code runs
     entirely on your machine or routes selectively to the cloud.
   </p>
 
-  <div class="ww-group">
-    <span class="ww-label">Engines</span>
-    <div class="ww-pills">
-      {engines.map((name) => (
-        <span class="pill"><span class="pill-dot" aria-hidden="true"></span>{name}</span>
-      ))}
+  <div class="ww-panel">
+    <div class="ww-col">
+      <span class="ww-label">Engines</span>
+      <div class="ww-pills">
+        {engines.map((name) => (
+          <span class="pill"><span class="pill-dot" aria-hidden="true"></span>{name}</span>
+        ))}
+      </div>
     </div>
-  </div>
 
-  <div class="ww-group">
-    <span class="ww-label">Hardware</span>
-    <div class="ww-pills">
-      {hardware.map((name) => (
-        <span class="pill pill-amber"><span class="pill-dot" aria-hidden="true"></span>{name}</span>
-      ))}
+    <div class="ww-col">
+      <span class="ww-label">Hardware</span>
+      <div class="ww-pills">
+        {hardware.map((name) => (
+          <span class="pill pill-amber"><span class="pill-dot" aria-hidden="true"></span>{name}</span>
+        ))}
+      </div>
     </div>
-  </div>
 
-  <div class="ww-group">
-    <span class="ww-label">Tools &amp; protocols</span>
-    <div class="ww-pills">
-      {protocols.map((name) => (
-        <span class="pill"><span class="pill-dot" aria-hidden="true"></span>{name}</span>
-      ))}
+    <div class="ww-col">
+      <span class="ww-label">Tools &amp; protocols</span>
+      <div class="ww-pills">
+        {protocols.map((name) => (
+          <span class="pill"><span class="pill-dot" aria-hidden="true"></span>{name}</span>
+        ))}
+      </div>
     </div>
   </div>
 </Section>
 
 <style>
   .ww-intro {
-    max-width: 62ch;
+    max-width: 52ch;
     font-size: 1.02rem;
     line-height: 1.7;
     color: var(--color-text-secondary);
-    margin: 0 0 2rem;
+    margin: 0 0 2.25rem;
   }
 
-  .ww-group {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding: 1.1rem 0;
+  /* Instrument panel: three columns split by vertical hairlines */
+  .ww-panel {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
   }
-  .ww-group:last-child { border-bottom: 1px solid var(--color-border); }
+
+  .ww-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem 1.6rem;
+  }
+  .ww-col + .ww-col {
+    border-left: 1px solid var(--color-border);
+  }
+  .ww-col:first-child { padding-left: 0; }
+  .ww-col:last-child { padding-right: 0; }
 
   .ww-label {
-    flex: 0 0 140px;
-    padding-top: 0.4rem;
+    position: relative;
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-text-tertiary);
+    color: var(--color-holo);
+    opacity: 0.85;
   }
 
   .ww-pills {
@@ -101,12 +114,20 @@ const protocols = ['MCP servers', 'OpenAI-compatible API', 'Web search', 'Code i
     box-shadow: 0 0 8px var(--logo-glow);
   }
   .pill-amber .pill-dot {
-    background: var(--color-amber);
-    box-shadow: 0 0 8px color-mix(in srgb, var(--color-amber) 55%, transparent);
+    background: var(--color-signal);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-signal) 55%, transparent);
   }
 
-  @media (max-width: 620px) {
-    .ww-group { flex-direction: column; gap: 0.75rem; }
-    .ww-label { flex-basis: auto; padding-top: 0; }
+  @media (max-width: 860px) {
+    .ww-panel { grid-template-columns: minmax(0, 1fr); }
+
+    .ww-col {
+      padding: 1.25rem 0;
+      gap: 0.8rem;
+    }
+    .ww-col + .ww-col {
+      border-left: 0;
+      border-top: 1px solid var(--color-border);
+    }
   }
 </style>

@@ -15,22 +15,29 @@ const iconByOrder: Record<number, string> = {
 };
 ---
 
-<Section id="features" title="Five primitives for personal AI">
+<Section id="features" title="Five primitives for personal AI" index={2}>
   <div class="grid">
-    {items.map((f) => (
+    {items.map((f, i) => (
       <FeatureCard
         title={f.data.title}
         summary={f.data.summary}
         icon={iconByOrder[f.data.order] ?? 'intelligence'}
+        size={i < 2 ? 'lg' : 'md'}
       />
     ))}
   </div>
 </Section>
 
 <style>
+  /* Bento: two wide cards on the first row, three narrower ones on the second.
+     Column spans live on the cards themselves (see FeatureCard.astro). */
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 1000px) and (min-width: 761px) {
+    .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
 </style>

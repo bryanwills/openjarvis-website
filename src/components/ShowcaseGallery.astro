@@ -15,7 +15,7 @@ const icons: Record<number, string> = {
 };
 ---
 
-<Section id="showcase" title="See it in action" link="#community" linkText="Build your own">
+<Section id="showcase" title="See it in action" index={4} link="#community" linkText="Build your own">
   <div class="gallery">
     {items.map((item) => (
       <a
@@ -46,10 +46,32 @@ const icons: Record<number, string> = {
 </Section>
 
 <style>
+  /* Bento: one wide lead card, then a four-up run */
   .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1.35rem;
+  }
+
+  .gallery-item:nth-child(1) { grid-column: span 4; }
+  .gallery-item:nth-child(1) .shot { aspect-ratio: 24 / 9; }
+  .gallery-item:nth-child(1) .shot-icon { width: 88px; height: 88px; }
+  .gallery-item:nth-child(1) .caption { padding: 1.15rem 1.35rem 1.3rem; }
+  .gallery-item:nth-child(1) .caption-title { font-size: 1.15rem; }
+  .gallery-item:nth-child(n + 2) { grid-column: span 2; }
+
+  @media (max-width: 1040px) and (min-width: 761px) {
+    .gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .gallery-item:nth-child(1) { grid-column: span 4; }
+    .gallery-item:nth-child(1) .shot { aspect-ratio: 21 / 9; }
+    .gallery-item:nth-child(n + 2) { grid-column: span 2; }
+  }
+
+  @media (max-width: 760px) {
+    .gallery-item:nth-child(1),
+    .gallery-item:nth-child(n + 2) { grid-column: auto; }
+    .gallery-item:nth-child(1) .shot { aspect-ratio: 16 / 10; }
+    .gallery-item:nth-child(1) .shot-icon { width: 72px; height: 72px; }
   }
 
   .gallery-item {
@@ -65,9 +87,10 @@ const icons: Record<number, string> = {
     transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
   }
   .gallery-item:hover {
-    transform: translateY(-4px);
+    transform: translateY(-1px);
     border-color: var(--color-border-accent);
-    box-shadow: 0 16px 40px color-mix(in srgb, var(--color-accent) 14%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-holo) 10%, transparent),
+                0 0 30px color-mix(in srgb, var(--color-holo) 13%, transparent);
   }
 
   /* Designed "app preview" panel (no screenshot needed) */
@@ -79,12 +102,36 @@ const icons: Record<number, string> = {
     justify-content: center;
     background:
       radial-gradient(120% 90% at 50% 0%,
-        color-mix(in srgb, var(--color-accent) 18%, transparent) 0%, transparent 60%),
+        color-mix(in srgb, var(--color-holo) 13%, transparent) 0%, transparent 60%),
+      radial-gradient(80% 70% at 80% 90%,
+        color-mix(in srgb, var(--color-holo) 10%, transparent) 0%, transparent 55%),
       linear-gradient(160deg,
         color-mix(in srgb, var(--color-accent) 8%, var(--color-surface-strong)) 0%,
         var(--color-bg-alt) 100%);
     border-bottom: 1px solid var(--color-border);
     overflow: hidden;
+  }
+  .shot::before {
+    content: '';
+    position: absolute;
+    inset: -70% 0;
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 46%,
+      color-mix(in srgb, var(--color-holo) 8%, transparent) 49%,
+      color-mix(in srgb, var(--color-holo) 62%, transparent) 50%,
+      color-mix(in srgb, var(--color-holo) 8%, transparent) 51%,
+      transparent 54%
+    );
+    transform: translateY(-20%);
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.2s ease;
+  }
+  .gallery-item:hover .shot::before {
+    opacity: 0.65;
+    transform: translateY(20%);
   }
   .shot::after {
     content: '';
@@ -108,9 +155,9 @@ const icons: Record<number, string> = {
     z-index: 1;
   }
   .cdot { width: 9px; height: 9px; border-radius: 50%; background: var(--color-border); }
-  .cdot:nth-child(1) { background: #ff5f56; opacity: 0.8; }
-  .cdot:nth-child(2) { background: #ffbd2e; opacity: 0.8; }
-  .cdot:nth-child(3) { background: #27c93f; opacity: 0.8; }
+  .cdot:nth-child(1) { background: #2150a6; opacity: 0.55; }
+  .cdot:nth-child(2) { background: #4a83c9; opacity: 0.72; }
+  .cdot:nth-child(3) { background: #66d9ed; box-shadow: 0 0 7px rgba(102, 217, 237, 0.5); }
 
   .shot-icon {
     position: relative;
@@ -120,11 +167,13 @@ const icons: Record<number, string> = {
     justify-content: center;
     width: 72px;
     height: 72px;
-    border-radius: 18px;
-    color: var(--color-accent);
-    background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+    border-radius: 50%;
+    color: var(--color-holo);
+    background: radial-gradient(circle,
+      color-mix(in srgb, var(--color-holo) 14%, transparent),
+      color-mix(in srgb, var(--color-accent) 14%, transparent));
     border: 1px solid var(--color-border-accent);
-    box-shadow: 0 0 30px var(--glow-soft);
+    box-shadow: 0 0 30px var(--glow-holo), inset 0 0 18px var(--glow-holo);
   }
 
   .caption {

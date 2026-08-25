@@ -1,74 +1,77 @@
 /* ============================================================
-   OpenJarvis global theme — OpenClaw-inspired, dark-first
-   Palette: zinc/space neutrals + cyan accent + amber secondary
+   OpenJarvis global theme — reactor HUD, dark-first
+   Palette sampled from the OpenJarvis arc-reactor mark
    ============================================================ */
 
 /* ---------- Tokens — DARK is the default (dark-first) ---------- */
 :root {
-  /* backgrounds (deep space) */
-  --color-bg:            #05080f;
-  --color-bg-alt:        #080c15;
-  --color-surface:       #0e141f;
-  --color-surface-strong:#141c2a;
+  /* backgrounds */
+  --color-bg:            #04051f;
+  --color-bg-alt:        #070a28;
+  --color-surface:       #0a0e2e;
+  --color-surface-strong:#0d1230;
 
   /* text */
-  --color-text:          #e9eef6;
-  --color-text-secondary:#9aabc0;
-  --color-text-tertiary: #65788f;
+  --color-text:          #f5f8ff;
+  --color-text-secondary:#b9c2e0;
+  --color-text-tertiary: #7f8ab1;
 
-  /* accent — cyan (brightened for dark) + amber secondary */
-  --color-accent:        #22d3ee;
-  --color-accent-hover:  #67e8f9;
-  --color-accent-deep:   #0891b2;
-  --color-amber:         #f59e0b;
+  /* reactor palette */
+  --color-accent:        #2150a6;
+  --color-accent-hover:  #66d9ed;
+  --color-accent-deep:   #00004e;
+  --color-signal:        #66d9ed;
+  --color-holo:          #66d9ed;
+  --color-core:          #fefefe;
 
   /* borders */
-  --color-border:        #1b2535;
-  --color-border-accent: color-mix(in srgb, var(--color-accent) 42%, transparent);
+  --color-border:        #171d49;
+  --color-border-accent: color-mix(in srgb, var(--color-holo) 48%, transparent);
 
   /* effects */
-  --logo-glow:           color-mix(in srgb, var(--color-accent) 55%, transparent);
-  --grad-start:          #22d3ee;
-  --grad-end:            #2dd4bf;
-  --glow-soft:           color-mix(in srgb, var(--color-accent) 16%, transparent);
+  --logo-glow:           color-mix(in srgb, var(--color-holo) 58%, transparent);
+  --glow-holo:           color-mix(in srgb, var(--color-holo) 22%, transparent);
+
+  /* layout */
+  --rail-w: 4.25rem;
 
   /* radius */
-  --radius-sm: 6px;
-  --radius-md: 9px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 18px;
 
   /* type */
-  --font-sans: 'Satoshi', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
                'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-display: 'Clash Display', var(--font-sans);
-  --font-mono: ui-monospace, 'Cascadia Code', 'Fira Code', 'Jetbrains Mono',
+  --font-display: 'Chakra Petch', var(--font-sans);
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', 'Fira Code',
                Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 /* ---------- LIGHT override (toggle) ---------- */
 :root[data-theme='light'] {
-  --color-bg:            #fafafa;
-  --color-bg-alt:        #f3f5f8;
+  --color-bg:            #f5f8ff;
+  --color-bg-alt:        #eaf0fb;
   --color-surface:       #ffffff;
   --color-surface-strong:#ffffff;
 
-  --color-text:          #09090b;
-  --color-text-secondary:#52525b;
-  --color-text-tertiary: #71717a;
+  --color-text:          #0a1030;
+  --color-text-secondary:#3f4c75;
+  --color-text-tertiary: #69759a;
 
-  --color-accent:        #0891b2;
-  --color-accent-hover:  #0e7490;
-  --color-accent-deep:   #0891b2;
-  --color-amber:         #d97706;
+  --color-accent:        #2150a6;
+  --color-accent-hover:  #126f8c;
+  --color-accent-deep:   #00004e;
+  --color-signal:        #126f8c;
+  --color-holo:          #126f8c;
+  --color-core:          #ffffff;
 
-  --color-border:        #e4e4e7;
-  --color-border-accent: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  --color-border:        #cbd6ee;
+  --color-border-accent: color-mix(in srgb, var(--color-holo) 50%, transparent);
 
-  --logo-glow:           color-mix(in srgb, var(--color-accent) 28%, transparent);
-  --grad-start:          #0891b2;
-  --grad-end:            #0d9488;
-  --glow-soft:           color-mix(in srgb, var(--color-accent) 12%, transparent);
+  --logo-glow:           color-mix(in srgb, var(--color-holo) 30%, transparent);
+  --glow-holo:           color-mix(in srgb, var(--color-holo) 14%, transparent);
 }
 
 /* ---------- Box-sizing reset ---------- */
@@ -94,72 +97,74 @@ body {
   overflow-x: hidden;
 }
 
-/* ---------- Space background layers (dark only) ---------- */
-.bg-nebula,
-.bg-stars {
+/* ---------- HUD background ---------- */
+.bg-grid,
+.bg-scan {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
 }
 
-.bg-nebula {
-  background:
-    radial-gradient(60% 50% at 50% -8%,
-      color-mix(in srgb, var(--color-accent) 16%, transparent) 0%, transparent 70%),
-    radial-gradient(45% 40% at 88% 6%,
-      color-mix(in srgb, var(--color-amber) 9%, transparent) 0%, transparent 65%),
-    radial-gradient(50% 45% at 8% 18%,
-      color-mix(in srgb, var(--color-accent) 8%, transparent) 0%, transparent 60%);
-}
-
-.bg-stars {
-  top: -12%;
-  bottom: auto;
-  height: 124%;
-  opacity: 0.6;
-  animation: star-drift 90s ease-in-out infinite alternate,
-             star-twinkle 8s ease-in-out infinite;
+/* Faint survey grid: fine cells with a heavier line every fifth one. Uses the
+   deep accent blue rather than cyan so the lines sit back instead of glowing.
+   A set of overlapping feathered circles masks it, so the grid surfaces only in
+   soft irregular patches rather than as an even sheet. Multiple mask layers
+   default to mask-composite: add, so the blobs union together. */
+.bg-grid {
+  --grid-fine: color-mix(in srgb, var(--color-accent) 26%, transparent);
+  --grid-major: color-mix(in srgb, var(--color-accent) 38%, transparent);
+  --grid-patches:
+    radial-gradient(38% 30% at 14% 8%, #000 0%, rgba(0, 0, 0, 0.45) 38%, transparent 72%),
+    radial-gradient(30% 25% at 74% 18%, #000 0%, rgba(0, 0, 0, 0.4) 34%, transparent 70%),
+    radial-gradient(26% 34% at 94% 46%, #000 0%, rgba(0, 0, 0, 0.35) 32%, transparent 68%),
+    radial-gradient(34% 26% at 44% 62%, #000 0%, rgba(0, 0, 0, 0.3) 30%, transparent 66%),
+    radial-gradient(30% 28% at 6% 74%, #000 0%, rgba(0, 0, 0, 0.4) 36%, transparent 70%),
+    radial-gradient(24% 22% at 66% 92%, #000 0%, rgba(0, 0, 0, 0.35) 34%, transparent 68%);
+  opacity: 0.42;
   background-image:
-    radial-gradient(1px 1px at 12% 18%, #fff, transparent),
-    radial-gradient(1px 1px at 27% 42%, #cfe9ff, transparent),
-    radial-gradient(1px 1px at 41% 12%, #fff, transparent),
-    radial-gradient(1px 1px at 55% 33%, #bcd6ff, transparent),
-    radial-gradient(1px 1px at 68% 8%,  #fff, transparent),
-    radial-gradient(1px 1px at 73% 47%, #fff, transparent),
-    radial-gradient(1px 1px at 84% 24%, #d7ecff, transparent),
-    radial-gradient(1px 1px at 91% 39%, #fff, transparent),
-    radial-gradient(1px 1px at 18% 61%, #fff, transparent),
-    radial-gradient(1px 1px at 33% 78%, #c9e2ff, transparent),
-    radial-gradient(1px 1px at 47% 88%, #fff, transparent),
-    radial-gradient(1px 1px at 62% 67%, #fff, transparent),
-    radial-gradient(1px 1px at 79% 82%, #d7ecff, transparent),
-    radial-gradient(1px 1px at 95% 71%, #fff, transparent);
-  background-repeat: no-repeat;
+    linear-gradient(to right, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(to right, var(--grid-fine) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-fine) 1px, transparent 1px);
+  background-size: 240px 240px, 240px 240px, 48px 48px, 48px 48px;
+  background-position: center top;
+  mask-image: var(--grid-patches);
+  -webkit-mask-image: var(--grid-patches);
 }
 
-:root[data-theme='light'] .bg-nebula { opacity: 0.5; }
-:root[data-theme='light'] .bg-stars { display: none; }
-
-@keyframes star-drift {
-  from { transform: translateY(0); }
-  to { transform: translateY(-9%); }
+/* Slow ambient scan band — the page-scale echo of the showcase card scanline */
+.bg-scan {
+  opacity: 0.55;
+  background: linear-gradient(
+    to bottom,
+    transparent 0 43%,
+    color-mix(in srgb, var(--color-holo) 4%, transparent) 47%,
+    color-mix(in srgb, var(--color-holo) 22%, transparent) 50%,
+    color-mix(in srgb, var(--color-holo) 4%, transparent) 53%,
+    transparent 57% 100%
+  );
+  animation: scan-sweep 15s linear infinite;
 }
-@keyframes star-twinkle {
-  0%, 100% { opacity: 0.45; }
-  50% { opacity: 0.7; }
+
+:root[data-theme='light'] .bg-grid { opacity: 0.27; }
+:root[data-theme='light'] .bg-scan { display: none; }
+
+@keyframes scan-sweep {
+  0%   { transform: translateY(-82%); }
+  100% { transform: translateY(82%); }
 }
 
 /* ---------- Scroll reveal ---------- */
 .reveal {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
-  will-change: opacity, transform;
+  filter: brightness(0.82);
+  transition: opacity 0.7s ease, filter 0.7s ease;
+  will-change: opacity, filter;
 }
 .reveal.in {
   opacity: 1;
-  transform: none;
+  filter: none;
 }
 
 /* ---------- Typography ---------- */
@@ -167,8 +172,8 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 0 0.5em;
   font-family: var(--font-display);
   font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -0.01em;
+  line-height: 1.14;
+  letter-spacing: 0;
   color: var(--color-text);
 }
 
@@ -204,11 +209,11 @@ pre {
 }
 
 code:not(pre > code) {
-  background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  background-color: color-mix(in srgb, var(--color-holo) 12%, transparent);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: 0.15em 0.4em;
-  color: var(--color-accent-hover);
+  color: var(--color-holo);
 }
 
 img, video, svg { display: block; max-width: 100%; }
@@ -217,29 +222,30 @@ ul, ol { margin: 0 0 1em; padding-left: 1.5em; color: var(--color-text-secondary
 
 /* ---------- Layout ---------- */
 .container {
+  width: 100%;
   max-width: 1120px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-.section { padding: 84px 0; position: relative; }
+.section { padding: 104px 0; position: relative; }
 
-/* Centered gradient hairline between sections */
+/* Divider hairline: bright where the rail starts, fading out to the right */
 .section::before {
   content: '';
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: min(1120px, 92%);
+  width: min(1072px, 100% - 48px);
   height: 1px;
-  background: linear-gradient(90deg, transparent,
-    color-mix(in srgb, var(--color-accent) 22%, var(--color-border)) 50%, transparent);
-}
-
-/* Faint alternating striping for depth (translucent over the starfield) */
-main > .section:nth-of-type(even) {
-  background: color-mix(in srgb, var(--color-bg-alt) 55%, transparent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-holo) 60%, transparent) 0,
+    color-mix(in srgb, var(--color-accent) 45%, var(--color-border)) 20%,
+    color-mix(in srgb, var(--color-border) 90%, transparent) 62%,
+    transparent 92%
+  );
 }
 
 /* ---------- Selection + scrollbar ---------- */
@@ -293,17 +299,18 @@ html {
 .btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
 
 .btn-primary {
-  background-color: var(--color-accent);
-  color: #04121a;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 0 transparent, 0 8px 26px var(--glow-soft);
+  background: var(--color-accent);
+  color: var(--color-core);
+  border-color: color-mix(in srgb, var(--color-holo) 28%, var(--color-accent));
+  box-shadow: 0 8px 26px color-mix(in srgb, var(--color-accent) 22%, transparent);
 }
 .btn-primary:hover {
-  background-color: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
-  color: #04121a;
+  background: var(--color-accent);
+  border-color: var(--color-holo);
+  color: var(--color-core);
   transform: translateY(-1px);
-  box-shadow: 0 10px 30px color-mix(in srgb, var(--color-accent) 30%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-holo) 25%, transparent),
+              0 0 26px color-mix(in srgb, var(--color-holo) 32%, transparent);
 }
 
 .btn-outline {
@@ -315,6 +322,7 @@ html {
   border-color: var(--color-border-accent);
   color: var(--color-text);
   background-color: var(--color-surface-strong);
+  box-shadow: 0 0 18px var(--glow-holo);
 }
 
 /* ---------- Shared: section header with chevron ---------- */
@@ -332,10 +340,20 @@ html {
   margin: 0;
 }
 .section-chevron {
-  color: var(--color-accent);
-  font-weight: 700;
-  font-family: var(--font-mono);
-  text-shadow: 0 0 16px var(--logo-glow);
+  position: relative;
+  width: 0.72em;
+  height: 0.72em;
+  border: 1px solid var(--color-holo);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--glow-holo);
+  flex: 0 0 auto;
+}
+.section-chevron::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--color-accent);
 }
 .section-kicker {
   font-size: 0.78rem;
@@ -377,7 +395,7 @@ html {
     grid-template-columns: 1fr !important;
   }
   .container { padding: 0 16px; }
-  .section { padding: 56px 0; }
+  .section { padding: 64px 0; }
   .section-header { flex-wrap: wrap; }
 }
 
