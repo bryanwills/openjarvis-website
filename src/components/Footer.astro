@@ -1,5 +1,6 @@
 ---
 import { site } from '../config/site';
+import BrandDownloads from './BrandDownloads.astro';
 
 const links = [
   { label: 'GitHub', href: site.links.github, ext: true },
@@ -12,10 +13,10 @@ const links = [
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <a href="/" class="footer-brand" aria-label="OpenJarvis home">
-      <img class="footer-mark" src="/logo-mark.png" alt="" width="26" height="26" aria-hidden="true" />
-      <span>OpenJarvis</span>
-    </a>
+    <BrandDownloads id="brand-dl-footer" placement="up">
+      <img class="footer-mark" src="/logo-mark.svg" alt="" width="26" height="26" aria-hidden="true" />
+      <span class="footer-brand-name">OpenJarvis</span>
+    </BrandDownloads>
 
     <nav class="footer-nav" aria-label="Footer">
       {links.map((l, i) => (
@@ -56,15 +57,11 @@ const links = [
     text-align: center;
     gap: 1rem;
   }
-  .footer-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-text);
-    text-decoration: none;
+  .footer-brand-name {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1.1rem;
+    color: var(--color-text);
   }
   .footer-mark { width: 26px; height: 26px; filter: drop-shadow(0 0 8px var(--logo-glow)); }
 

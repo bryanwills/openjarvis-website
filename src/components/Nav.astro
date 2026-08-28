@@ -1,5 +1,6 @@
 ---
 import { site } from '../config/site';
+import BrandDownloads from './BrandDownloads.astro';
 
 // Shared by the inline row and the small-screen dropdown so they can't drift.
 const navLinks = [
@@ -12,10 +13,10 @@ const navLinks = [
 
 <header class="site-topbar">
   <div class="container topbar-inner">
-    <a href="/" class="brand" aria-label="OpenJarvis home">
-      <img class="brand-mark" src="/logo-mark.png" alt="" width="28" height="28" aria-hidden="true" />
+    <BrandDownloads id="brand-dl-nav" placement="down">
+      <img class="brand-mark" src="/logo-mark.svg" alt="" width="28" height="28" aria-hidden="true" />
       <span class="brand-name">OpenJarvis</span>
-    </a>
+    </BrandDownloads>
 
     <nav class="topbar-nav" aria-label="Main navigation">
       {navLinks.map((l) => (
@@ -180,14 +181,6 @@ const navLinks = [
     height: 62px;
   }
 
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    color: var(--color-text);
-    text-decoration: none;
-    flex-shrink: 0;
-  }
   .brand-mark {
     width: 28px;
     height: 28px;

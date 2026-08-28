@@ -1,0 +1,171 @@
+---
+import raw from '../../public/logo-mark.svg?raw';
+
+interface Props {
+  animated?: boolean;
+  class?: string;
+}
+
+const { animated = false, class: className } = Astro.props;
+
+let markup = raw.replace(/<\?xml[^?]*\?>\s*/, '').trim();
+markup = markup.replace(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 540">',
+  '<svg class="logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 540" aria-hidden="true" focusable="false">',
+);
+markup = markup.replace(
+  '</radialGradient>',
+  `</radialGradient>
+    <clipPath id="oj-core-clip">
+      <circle class="logo-core-clip" cx="270" cy="269.82" r="86.56" />
+    </clipPath>`,
+);
+markup = markup.replace(
+  '<g id="center_grade" data-name="center grade">',
+  '<g id="center_grade" data-name="center grade" clip-path="url(#oj-core-clip)">',
+);
+---
+
+<div class:list={['logo-mark-host', animated && 'is-animated', className]}>
+  <Fragment set:html={markup} />
+</div>
+
+<style>
+  .logo-mark-host {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .logo-mark-host :global(.logo-mark) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .is-animated :global(#base_circle),
+  .is-animated :global(#inner_ring_big),
+  .is-animated :global(#inner_ring_med),
+  .is-animated :global(#inner_blocks),
+  .is-animated :global(#outer_blocks),
+  .is-animated :global(#center_grade) {
+    transform-box: view-box;
+    transform-origin: 270px 269.82px;
+  }
+
+  .is-animated :global(#base_circle) {
+    animation: logo-base-in 0.28s ease-out both;
+  }
+
+  .is-animated :global(#inner_ring_big),
+  .is-animated :global(#inner_ring_med) {
+    animation: logo-ring-in 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .is-animated :global(#inner_ring_big) { animation-delay: 0.12s; }
+  .is-animated :global(#inner_ring_med) { animation-delay: 0.2s; }
+
+  .is-animated :global(#inner_blocks) {
+    animation:
+      logo-inner-in 0.48s cubic-bezier(0.2, 0.8, 0.2, 1) 0.38s both,
+      logo-spin-ccw 38s linear 1.45s infinite;
+  }
+
+  .is-animated :global(#outer_blocks) {
+    animation: logo-spin-cw 56s linear 1.45s infinite;
+  }
+
+  .is-animated :global(#accent_lines),
+  .is-animated :global([id^='out_block_']) {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: logo-wedge-in 0.34s ease-out both;
+  }
+  .is-animated :global(#accent_lines) { animation-delay: 0.62s; }
+  .is-animated :global(#out_block_01) { animation-delay: 0.62s; }
+  .is-animated :global(#out_block_02) { animation-delay: 0.66s; }
+  .is-animated :global(#out_block_03) { animation-delay: 0.7s; }
+  .is-animated :global(#out_block_04) { animation-delay: 0.74s; }
+  .is-animated :global(#out_block_05) { animation-delay: 0.78s; }
+  .is-animated :global(#out_block_06) { animation-delay: 0.82s; }
+  .is-animated :global(#out_block_07) { animation-delay: 0.86s; }
+  .is-animated :global(#out_block_08) { animation-delay: 0.9s; }
+  .is-animated :global(#out_block_09) { animation-delay: 0.94s; }
+  .is-animated :global(#out_block_10) { animation-delay: 0.98s; }
+
+  .is-animated :global(.logo-core-clip) {
+    r: 0;
+    animation: logo-core-clip 0.55s cubic-bezier(0.16, 0.84, 0.32, 1) 1.05s forwards;
+  }
+
+  .is-animated :global(#center_grade) {
+    animation:
+      logo-core-bloom 0.55s ease-out 1.05s both,
+      logo-core-breathe 6s ease-in-out 1.6s infinite;
+  }
+
+  @keyframes logo-base-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes logo-ring-in {
+    from { opacity: 0; transform: scale(0.72); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes logo-inner-in {
+    from { opacity: 0; transform: rotate(-14deg); }
+    to   { opacity: 1; transform: rotate(0deg); }
+  }
+
+  @keyframes logo-wedge-in {
+    from { opacity: 0; transform: scale(0.72); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes logo-core-clip {
+    from { r: 0px; }
+    to   { r: 86.56px; }
+  }
+
+  @keyframes logo-core-bloom {
+    0%   { filter: brightness(0.45); opacity: 0.35; }
+    45%  { filter: brightness(1.4); opacity: 1; }
+    100% { filter: brightness(1); opacity: 1; }
+  }
+
+  @keyframes logo-core-breathe {
+    0%, 100% { filter: brightness(0.94); }
+    50%      { filter: brightness(1.12); }
+  }
+
+  @keyframes logo-spin-cw {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes logo-spin-ccw {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(-360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .is-animated :global(#base_circle),
+    .is-animated :global(#inner_ring_big),
+    .is-animated :global(#inner_ring_med),
+    .is-animated :global(#inner_blocks),
+    .is-animated :global(#outer_blocks),
+    .is-animated :global(#accent_lines),
+    .is-animated :global([id^='out_block_']),
+    .is-animated :global(#center_grade),
+    .is-animated :global(.logo-core-clip) {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+    .is-animated :global(.logo-core-clip) {
+      r: 86.56px !important;
+    }
+  }
+</style>
