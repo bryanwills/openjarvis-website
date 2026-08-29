@@ -1,0 +1,201 @@
+---
+interface Props {
+  id: string;
+  placement?: 'down' | 'up';
+  class?: string;
+}
+
+const { id, placement = 'down', class: className } = Astro.props;
+const panelId = `${id}-panel`;
+
+const files = [
+  { label: 'PNG', href: '/logo-mark-1024.png', title: 'Mark, 1024px PNG', icon: 'png' },
+  { label: 'SVG', href: '/logo-mark.svg', title: 'Mark, SVG', icon: 'svg' },
+  { label: 'All', href: '/openjarvis-logos.zip', title: 'Mark and lockup, PNG and SVG', icon: 'zip' },
+];
+---
+
+<div class:list={['brand-dl', `is-${placement}`, className]}>
+  <button
+    id={id}
+    class="brand-dl-btn"
+    type="button"
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-controls={panelId}
+    aria-label="OpenJarvis brand assets"
+  >
+    <slot />
+    <svg class="brand-dl-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M6 9l6 6 6-6"></path>
+    </svg>
+  </button>
+
+  <div id={panelId} class="brand-dl-panel" hidden>
+    {files.map((f) => (
+      <a class="brand-dl-item" href={f.href} download title={f.title}>
+        <svg class="brand-dl-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          {f.icon === 'png' && (
+            <>
+              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+              <circle cx="8.5" cy="9.5" r="1.6"></circle>
+              <path d="M4 17l4.5-4.5 3.5 3.5 3-2.5L20 18"></path>
+            </>
+          )}
+          {f.icon === 'svg' && (
+            <>
+              <path d="M12 4.5L18.5 8v8L12 19.5 5.5 16V8L12 4.5z"></path>
+              <circle cx="12" cy="4.5" r="1.7" fill="currentColor" stroke="none"></circle>
+              <circle cx="18.5" cy="16" r="1.7" fill="currentColor" stroke="none"></circle>
+              <circle cx="5.5" cy="16" r="1.7" fill="currentColor" stroke="none"></circle>
+            </>
+          )}
+          {f.icon === 'zip' && (
+            <>
+              <path d="M4 8.5l8-4 8 4-8 4-8-4z"></path>
+              <path d="M4 12.5l8 4 8-4"></path>
+              <path d="M4 16.5l8 4 8-4"></path>
+            </>
+          )}
+        </svg>
+        <span>{f.label}</span>
+      </a>
+    ))}
+  </div>
+</div>
+
+<script define:vars={{ id, panelId }}>
+  const btn = document.getElementById(id);
+  const panel = document.getElementById(panelId);
+  if (btn && panel) {
+    const setOpen = (open) => {
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    };
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setOpen(panel.hidden);
+    });
+
+    // The browser handles the download itself, so the panel can close on pick.
+    panel.addEventListener('click', (e) => {
+      if (e.target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!panel.hidden && !panel.contains(e.target) && !btn.contains(e.target)) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        setOpen(false);
+        btn.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .brand-dl {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .brand-dl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .brand-dl-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Sits outside the flow so the brand lockup never shifts on hover. */
+  .brand-dl-caret {
+    position: absolute;
+    left: calc(100% + 0.25rem);
+    top: 50%;
+    color: var(--color-text-tertiary);
+    opacity: 0;
+    transform: translateY(-50%) translateX(-3px);
+    transition: opacity 0.15s ease, transform 0.15s ease, color 0.15s ease;
+  }
+  .is-up .brand-dl-caret { transform: translateY(-50%) translateX(-3px) rotate(180deg); }
+
+  .brand-dl-btn:hover .brand-dl-caret,
+  .brand-dl-btn:focus-visible .brand-dl-caret,
+  .brand-dl-btn[aria-expanded='true'] .brand-dl-caret {
+    opacity: 1;
+    color: var(--color-holo);
+    transform: translateY(-50%);
+  }
+  .is-up .brand-dl-btn:hover .brand-dl-caret,
+  .is-up .brand-dl-btn:focus-visible .brand-dl-caret,
+  .is-up .brand-dl-btn[aria-expanded='true'] .brand-dl-caret {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  .brand-dl-panel {
+    position: absolute;
+    left: 0;
+    z-index: 95;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 8.5rem;
+    padding: 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: 0 18px 44px color-mix(in srgb, var(--color-accent-deep) 55%, transparent),
+                0 0 0 1px color-mix(in srgb, var(--color-holo) 8%, transparent);
+  }
+  /* display:flex above would otherwise defeat the hidden attribute */
+  .brand-dl-panel[hidden] { display: none; }
+
+  .is-down .brand-dl-panel { top: calc(100% + 0.55rem); }
+  /* The footer brand is centred, so the panel is centred on it rather than flush left. */
+  .is-up .brand-dl-panel {
+    bottom: calc(100% + 0.55rem);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .brand-dl-item {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .brand-dl-item:hover {
+    color: var(--color-holo);
+    background: color-mix(in srgb, var(--color-holo) 6%, transparent);
+    border-color: color-mix(in srgb, var(--color-holo) 20%, transparent);
+  }
+  .brand-dl-icon { flex-shrink: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand-dl-caret { transition: none; }
+  }
+</style>

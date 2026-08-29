@@ -214,17 +214,36 @@ import { site } from '../config/site';
     font-family: var(--font-mono);
     font-size: 0.88rem;
     line-height: 1.85;
-    overflow-x: auto;
+    overflow: hidden;
   }
-  .code-content { min-width: max-content; }
   .code-line {
-    width: max-content;
-    min-width: 100%;
+    min-width: 0;
     white-space: pre;
     display: flex;
     align-items: center;
     gap: 0.55ch;
   }
+  /* Back-to-back commands would sit the two 40px buttons edge to edge */
+  .code-line.cmd + .code-line.cmd { margin-top: 0.4rem; }
+
+  /* Every line clips and scrolls its own overflow, so nothing can spill past
+     the copy button or out of the console. */
+  .ctext,
+  .code-line.comment,
+  .code-line.out {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+  .ctext::-webkit-scrollbar,
+  .code-line.comment::-webkit-scrollbar,
+  .code-line.out::-webkit-scrollbar { display: none; }
+  /* Trailing room matches the fade width, so scrolling to the end brings the
+     tail of the command clear of the gradient instead of parking it underneath */
+  .ctext { flex: 1 1 auto; min-width: 0; padding-right: 3rem; }
+  /* Breathing room so overflow clipping doesn't cut the readout glow */
+  .code-line.out { padding-block: 0.5rem; margin-block: -0.5rem; }
+
   .code-line.comment { color: #7180aa; }
   .code-line.out {
     color: #66d9ed;
@@ -245,7 +264,11 @@ import { site } from '../config/site';
   .ctext { color: #f5f8ff; }
   .arg { color: #91aee8; }
 
+  /* Holds the right end of the line; the command scrolls in the space left of
+     it, so the button can never be pushed out of the console. */
   .copy-line {
+    position: relative;
+    z-index: 2;
     margin-left: auto;
     display: inline-flex;
     align-items: center;
@@ -255,7 +278,9 @@ import { site } from '../config/site';
     padding: 0 1.1rem;
     border: 1px solid #1f2c3d;
     border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.04);
+    /* Opaque base, tint on top, so scrolled text can't show through */
+    background-color: #060924;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.04));
     color: #8b99aa;
     font-family: var(--font-sans);
     font-size: 0.9rem;
@@ -263,6 +288,18 @@ import { site } from '../config/site';
     cursor: pointer;
     flex-shrink: 0;
     transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  /* Fades the command out as it slides under the button */
+  .copy-line::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    /* Clears the button's own 1px border, which it would otherwise paint over */
+    right: calc(100% + 1px);
+    width: 3rem;
+    background: linear-gradient(to right, rgba(6, 9, 36, 0), #060924 88%);
+    pointer-events: none;
   }
   .copy-line svg { width: 18px; height: 18px; }
   /* The `hidden` attribute doesn't apply to inline SVG — drive icon swap via class */
@@ -272,7 +309,7 @@ import { site } from '../config/site';
   .copy-line:hover {
     color: #66d9ed;
     border-color: rgba(102, 217, 237, 0.42);
-    background: rgba(102, 217, 237, 0.08);
+    background-image: linear-gradient(rgba(102, 217, 237, 0.08), rgba(102, 217, 237, 0.08));
   }
   .copy-line.copied { color: #66d9ed; border-color: rgba(102, 217, 237, 0.42); }
 
@@ -296,7 +333,12 @@ import { site } from '../config/site';
     line-height: 1.7;
     color: var(--color-text-secondary);
   }
-  .qs-note a { font-weight: 600; display: inline-block; margin-top: 0.5rem; }
+  .qs-note a {
+    display: block;
+    width: fit-content;
+    margin-top: 0.65rem;
+    font-weight: 600;
+  }
 
   @media (max-width: 900px) {
     .qs-layout {
@@ -305,7 +347,7 @@ import { site } from '../config/site';
     }
     /* console first, note underneath */
     .qs-console { grid-area: auto; }
-    .qs-note { grid-area: auto; padding-top: 0; }
+    .qs-note { grid-area: auto; padding-top: 0; max-width: 545px; }
   }
 
   @media (max-width: 520px) {

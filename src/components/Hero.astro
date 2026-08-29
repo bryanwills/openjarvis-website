@@ -1,5 +1,6 @@
 ---
 import { site } from '../config/site';
+import LogoMark from './LogoMark.astro';
 ---
 
 <header class="hero">
@@ -36,7 +37,7 @@ import { site } from '../config/site';
         <span class="hero-gimbal hero-gimbal-a"></span>
         <span class="hero-gimbal hero-gimbal-b"></span>
         <span class="hero-brackets"><i></i><i></i><i></i><i></i></span>
-        <img class="hero-mark" src="/logo-mark.png" alt="" width="104" height="104" />
+        <LogoMark animated class="hero-mark" />
       </div>
     </div>
   </div>
@@ -83,8 +84,7 @@ import { site } from '../config/site';
     place-items: center;
     width: var(--mark);
     height: var(--mark);
-    animation: hero-float 7s ease-in-out infinite,
-               reactor-breathe 6s ease-in-out infinite;
+    animation: hero-float 7s ease-in-out infinite;
   }
 
   .hero-mark {
@@ -232,11 +232,6 @@ import { site } from '../config/site';
 
   @keyframes orbit-spin {
     to { transform: rotate(360deg); }
-  }
-
-  @keyframes reactor-breathe {
-    0%, 100% { filter: brightness(0.94); }
-    50%      { filter: brightness(1.08); }
   }
 
   /* Fly in and fade up, settle, click 45deg and back, then fly out and rest
